@@ -118,7 +118,6 @@ public class CharacterCreation : MonoBehaviour
                 break;
         }
 
-        char[] chars = colorPicker.Image.name.ToUpper().ToCharArray();
-        customizationHeader.text = string.Join(" ", chars);
+        customizationHeader.text = colorPicker.Image.name.ToHeader();
     }
 }

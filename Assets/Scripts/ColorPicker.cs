@@ -27,12 +27,11 @@ public class ColorPicker : MonoBehaviour
     public void Attach(Image image)
     {
         this.image = image;
-        char[] chars = image.name.ToUpper().ToCharArray();
-        header.text = string.Join(" ", chars);
+        header.text = Image.name.ToHeader();
 
-        red.SetValueWithoutNotify(this.image.color.r);
-        green.SetValueWithoutNotify(this.image.color.g);
-        blue.SetValueWithoutNotify(this.image.color.b);
+        red.SetValueWithoutNotify(Image.color.r);
+        green.SetValueWithoutNotify(Image.color.g);
+        blue.SetValueWithoutNotify(Image.color.b);
     }
 
     private void UpdateColor()
