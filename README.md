@@ -9,7 +9,7 @@ Consider it [this game] as a simulator clone of [State of Decay](https://en.wiki
 #### Features
 
 * Character Customization
-* Exstensive Character Interaction 
+* Extensive Character Interaction 
 * Resource Management
 * Base Building
 * Dynamic Event System
