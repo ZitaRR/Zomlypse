@@ -20,7 +20,7 @@ Consider it [this game] as a simulator clone of [State of Decay](https://en.wiki
 
 ## Design UI
 
-Mockup designs for different views.
+Mockup designs for different views, this will be updated continuously.
 
 #### Main Game View
 
