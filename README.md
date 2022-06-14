@@ -20,9 +20,13 @@ Consider it [this game] as a simulator clone of [State of Decay](https://en.wiki
 
 ## Design UI
 
-Mockup design for the main game window.
+Mockup designs for different views.
+
+#### Main Game View
 
 ![game](https://github.com/ZitaRR/Zomlypse/blob/master/Resources/game_window.png)
+
+#### Character Creation View
 
 ![character creation](https://github.com/ZitaRR/Zomlypse/blob/dev/Resources/character_creation_window.png)
 
