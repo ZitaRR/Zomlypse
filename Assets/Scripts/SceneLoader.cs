@@ -20,9 +20,13 @@ public class SceneLoader : MonoBehaviour
 
     private CanvasGroup canvas;
 
-    private void Start()
+    private void Awake()
     {
         canvas = GetComponent<CanvasGroup>();
+    }
+
+    private void Start()
+    {
         canvas.alpha = 0f;
 
         StartCoroutine(Load());

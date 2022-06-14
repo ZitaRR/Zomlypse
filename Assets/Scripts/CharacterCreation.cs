@@ -68,13 +68,16 @@ public class CharacterCreation : MonoBehaviour
     private int hairIndex;
     private int beardIndex;
 
-    private void Start()
+    private void Awake()
     {
         activeHair = GameObject.FindGameObjectWithTag("Hair").GetComponent<Image>();
         activeBeard = GameObject.FindGameObjectWithTag("Beard").GetComponent<Image>();
         activeEyes = GameObject.FindGameObjectWithTag("Eyes").GetComponent<Image>();
         activeHead = GameObject.FindGameObjectWithTag("Head").GetComponent<Image>();
+    }
 
+    private void Start()
+    {
         dropdown.onValueChanged.AddListener(SetCustomizationOption);
 
         HairIndex = 0;
