@@ -22,6 +22,8 @@ Consider it [this game] as a simulator clone of [State of Decay](https://en.wiki
 
 Mockup design for the main game window.
 
-![alt text](https://github.com/ZitaRR/Zomlypse/blob/master/Resources/game_window.png)
+![game](https://github.com/ZitaRR/Zomlypse/blob/master/Resources/game_window.png)
+
+![character creation](https://github.com/ZitaRR/Zomlypse/blob/dev/Resources/character_creation_window.png)
 
 > Mockup designs does not represent the final product and are subject to change.
