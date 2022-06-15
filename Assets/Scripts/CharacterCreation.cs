@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class CharacterCreation : MonoBehaviour
 {
@@ -9,19 +9,12 @@ public class CharacterCreation : MonoBehaviour
         get => hairIndex;
         set
         {
-            if (value < 0)
+            if (value < 0 && value >= hair.Length)
             {
-                hairIndex = hair.Length - 1;
-            }
-            else if (value >= hair.Length)
-            {
-                hairIndex = 0;
-            }
-            else
-            {
-                hairIndex = value;
+                throw new ArgumentOutOfRangeException(nameof(value));
             }
 
+            hairIndex = value;
             activeHair.sprite = hair[hairIndex];
         }
     }
@@ -30,22 +23,17 @@ public class CharacterCreation : MonoBehaviour
         get => beardIndex;
         set
         {
-            if (value < 0)
+            if (value < 0 && value >= beards.Length)
             {
-                beardIndex = beards.Length - 1;
-            }
-            else if (value >= beards.Length)
-            {
-                beardIndex = 0;
-            }
-            else
-            {
-                beardIndex = value;
+                throw new ArgumentOutOfRangeException(nameof(value));
             }
 
+            beardIndex = value;
             activeBeard.sprite = beards[beardIndex];
         }
     }
+    public bool IsDetailedCustomizationActive
+        => current == CustomizationPart.Hair || current == CustomizationPart.Beard;
 
     [Header("Sprites")]
     [SerializeField]
@@ -55,11 +43,15 @@ public class CharacterCreation : MonoBehaviour
 
     [Header("Misc")]
     [SerializeField]
-    private TMP_Dropdown dropdown;
+    private RectTransform customizationPanel;
+    [SerializeField]
+    private GameObject customizationContent;
+    [SerializeField]
+    private GameObject customizationCard;
     [SerializeField]
     private ColorPicker colorPicker;
     [SerializeField]
-    private TextMeshProUGUI customizationHeader;
+    private RectTransform optionsPanel;
 
     private Image activeHair;
     private Image activeBeard;
@@ -67,6 +59,7 @@ public class CharacterCreation : MonoBehaviour
     private Image activeHead;
     private int hairIndex;
     private int beardIndex;
+    private CustomizationPart current;
 
     private void Awake()
     {
@@ -78,23 +71,21 @@ public class CharacterCreation : MonoBehaviour
 
     private void Start()
     {
-        dropdown.onValueChanged.AddListener(SetCustomizationOption);
-
         HairIndex = 0;
         BeardIndex = 0;
 
         SetCustomizationOption(0);
     }
 
-    public void SetCustomizationIndex(int index = 1)
+    public void SetCustomizationIndex(int index = 0)
     {
         switch (colorPicker.Image.name)
         {
             case "Hair":
-                HairIndex += index;
+                HairIndex = index;
                 break;
             case "Beard":
-                BeardIndex += index;
+                BeardIndex = index;
                 break;
         }
     }
@@ -105,22 +96,84 @@ public class CharacterCreation : MonoBehaviour
         {
             case 0:
                 colorPicker.Attach(activeHead);
-                customizationHeader.transform.parent.gameObject.SetActive(false);
+                PopulateCustomizationContent();
                 break;
             case 1:
                 colorPicker.Attach(activeHair);
-                customizationHeader.transform.parent.gameObject.SetActive(true);
+                PopulateCustomizationContent(CustomizationPart.Hair);
                 break;
             case 2:
                 colorPicker.Attach(activeEyes);
-                customizationHeader.transform.parent.gameObject.SetActive(false);
+                PopulateCustomizationContent();
                 break;
             case 3:
                 colorPicker.Attach(activeBeard);
-                customizationHeader.transform.parent.gameObject.SetActive(true);
+                PopulateCustomizationContent(CustomizationPart.Beard);
+                break;
+        }
+    }
+
+    private void PopulateCustomizationContent(CustomizationPart part = CustomizationPart.None)
+    {
+        switch (part)
+        {
+            case CustomizationPart.Hair:
+                PopulateCustomizationContent(hair);
+                if (IsDetailedCustomizationActive)
+                {
+                    break;
+                }
+
+                UI.Move(customizationPanel, optionsPanel, Direction.Right);
+                break;
+            case CustomizationPart.Beard:
+                PopulateCustomizationContent(beards);
+                if (IsDetailedCustomizationActive)
+                {
+                    break;
+                }
+
+                UI.Move(customizationPanel, optionsPanel, Direction.Right);
+                break;
+            default:
+                if (!IsDetailedCustomizationActive)
+                {
+                    break;
+                }
+
+                UI.Move(customizationPanel, optionsPanel, Direction.Normal);
+                ClearCustomizationContent();
                 break;
         }
 
-        customizationHeader.text = colorPicker.Image.name.ToHeader();
+        current = part;
+    }
+
+    private void PopulateCustomizationContent(Sprite[] content)
+    {
+        ClearCustomizationContent();
+        for (int i = 0; i < content.Length; i++)
+        {
+            GameObject card = CreateCustomizationCard(content[i]);
+            Button button = card.GetComponent<Button>();
+            int temp = i;
+            button.onClick.AddListener(() => SetCustomizationIndex(temp));
+        }
+    }
+
+    private GameObject CreateCustomizationCard(Sprite sprite)
+    {
+        GameObject card = Instantiate(customizationCard, customizationContent.transform);
+        Image image = card.transform.GetChild(0).GetComponent<Image>();
+        image.sprite = sprite;
+        return card;
+    }
+
+    private void ClearCustomizationContent()
+    {
+        for(int i = 0; i < customizationContent.transform.childCount; i++)
+        {
+            Destroy(customizationContent.transform.GetChild(i).gameObject);
+        }
     }
 }
