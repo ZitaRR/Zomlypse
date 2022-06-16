@@ -1,11 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public static class UI 
 {
-    public static void Move(RectTransform child, RectTransform parent, Direction direction)
+    public static LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, float duration = 1f, bool cancel = true)
     {
+        if (cancel)
+        {
+            child.LeanCancel();
+        }
+
         Vector3 position = parent.localPosition;
         switch (direction)
         {
@@ -26,6 +30,13 @@ public static class UI
                 break;
         }
 
-        LeanTween.move(child, position, 1f).setEase(LeanTweenType.easeInOutBack);
+        return LeanTween.move(child, position, duration).setEase(LeanTweenType.easeInOutBack);
+    }
+
+    public static LTDescr SweepTransition(RectTransform child, RectTransform parent, Action action)
+    {
+        Direction current = parent.localPosition.DirectionTo(child.localPosition);
+        LTDescr ltd = Sweep(child, parent, Direction.Normal, .8f, false).setOnComplete(() => action?.Invoke());
+        return Sweep(child, parent, current, .8f, false).setDelay(ltd.time);
     }
 }

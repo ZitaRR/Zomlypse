@@ -118,22 +118,24 @@ public class CharacterCreation : MonoBehaviour
         switch (part)
         {
             case CustomizationPart.Hair:
-                PopulateCustomizationContent(hair);
                 if (IsDetailedCustomizationActive)
                 {
+                    UI.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(hair));
                     break;
                 }
 
-                UI.Move(customizationPanel, optionsPanel, Direction.Right);
+                PopulateCustomizationContent(hair);
+                UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
                 break;
             case CustomizationPart.Beard:
-                PopulateCustomizationContent(beards);
                 if (IsDetailedCustomizationActive)
                 {
+                    UI.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(beards));
                     break;
                 }
 
-                UI.Move(customizationPanel, optionsPanel, Direction.Right);
+                PopulateCustomizationContent(beards);
+                UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
                 break;
             default:
                 if (!IsDetailedCustomizationActive)
@@ -141,8 +143,8 @@ public class CharacterCreation : MonoBehaviour
                     break;
                 }
 
-                UI.Move(customizationPanel, optionsPanel, Direction.Normal);
-                ClearCustomizationContent();
+                UI.Sweep(customizationPanel, optionsPanel, Direction.Normal)
+                    .setOnComplete(ClearCustomizationContent);
                 break;
         }
 
