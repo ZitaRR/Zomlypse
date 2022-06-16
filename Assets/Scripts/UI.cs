@@ -1,15 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class UI 
 {
-    public static LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, float duration = 1f, bool cancel = true)
+    private static Dictionary<int, LTDescr> tweeningElements = new Dictionary<int, LTDescr>();
+
+    public static LTDescr Move(RectTransform rect, Vector3 position, float duration = 1f, Action action = null)
     {
-        if (cancel)
+        if (IsTweening(rect, out LTDescr ltd))
         {
-            child.LeanCancel();
+            RemoveTween(ltd);
         }
 
+        ltd = LeanTween.move(rect, position, duration);
+        ltd.setOnStart(() => AddTween(ltd))
+            .setOnComplete(() =>
+            {
+                action?.Invoke();
+                RemoveTween(ltd);
+            });
+        return ltd;
+    }
+
+    public static LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, float duration = 1f, Action action = null)
+    {
         Vector3 position = parent.localPosition;
         switch (direction)
         {
@@ -30,13 +45,44 @@ public static class UI
                 break;
         }
 
-        return LeanTween.move(child, position, duration).setEase(LeanTweenType.easeInOutBack);
+        return Move(child, position, duration, action)
+            .setEase(LeanTweenType.easeInOutBack);
     }
 
     public static LTDescr SweepTransition(RectTransform child, RectTransform parent, Action action)
     {
         Direction current = parent.localPosition.DirectionTo(child.localPosition);
-        LTDescr ltd = Sweep(child, parent, Direction.Normal, .8f, false).setOnComplete(() => action?.Invoke());
-        return Sweep(child, parent, current, .8f, false).setDelay(ltd.time);
+        return Sweep(child, parent, Direction.Normal, .8f, () =>
+        {
+            action?.Invoke();
+            Sweep(child, parent, current, .8f);
+        });
+    }
+
+    private static void AddTween(LTDescr ltd)
+    {
+        if (IsTweening(ltd.rectTransform, out _))
+        {
+            return;
+        }
+
+        tweeningElements.Add(ltd.rectTransform.GetInstanceID(), ltd);
+    }
+
+    private static bool RemoveTween(LTDescr ltd)
+    {
+        if (!tweeningElements.Remove(ltd.rectTransform.GetInstanceID()))
+        {
+            return false;
+        }
+
+        //ltd.reset();
+        LeanTween.cancel(ltd.rectTransform);
+        return true;
+    }
+
+    public static bool IsTweening(RectTransform rect, out LTDescr ltd)
+    {
+        return tweeningElements.TryGetValue(rect.GetInstanceID(), out ltd);
     }
 }
