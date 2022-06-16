@@ -19,7 +19,7 @@ public static class UI
                 position.x = parent.offsetMax.x + (child.rect.width / 2);
                 break;
             case Direction.Down:
-                position.y = parent.offsetMin.y - (child.rect.height / 2);
+                position.y = parent.rect.yMin - (child.rect.height / 2);
                 break;
             case Direction.Left:
                 position.x = parent.offsetMin.x - (child.rect.width / 2);
