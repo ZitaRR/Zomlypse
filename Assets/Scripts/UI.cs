@@ -76,7 +76,6 @@ public static class UI
             return false;
         }
 
-        //ltd.reset();
         LeanTween.cancel(ltd.rectTransform);
         return true;
     }
