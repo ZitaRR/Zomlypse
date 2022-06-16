@@ -6,7 +6,7 @@ public static class UI
 {
     public static void Move(RectTransform child, RectTransform parent, Direction direction)
     {
-        Vector3 position = child.localPosition;
+        Vector3 position = parent.localPosition;
         switch (direction)
         {
             case Direction.Normal:
