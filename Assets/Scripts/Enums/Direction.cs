@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public enum Direction
+namespace Zomlypse.Enums
 {
-    Normal,
-    Up,
-    Right,
-    Down,
-    Left
+    public enum Direction
+    {
+        Normal,
+        Up,
+        Right,
+        Down,
+        Left
+    }
 }

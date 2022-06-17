@@ -1,30 +1,34 @@
 ﻿using UnityEngine;
+using Zomlypse.Enums;
 
-public static class Extensions 
+namespace Zomlypse.Extensions
 {
-    public static string ToHeader(this string str)
+    public static class Extensions
     {
-        char[] chars = str.ToUpper().ToCharArray();
-        return string.Join(" ", chars);
-    }
-
-    public static Direction DirectionTo(this Vector3 vector, Vector3 target)
-    {
-        Vector3 direction = (target - vector).normalized;
-        float x = Mathf.Abs(direction.x);
-        float y = Mathf.Abs(direction.y);
-
-        if (x > y)
+        public static string ToHeader(this string str)
         {
-            return direction.x > 0
-                ? Direction.Right
-                : Direction.Left;
+            char[] chars = str.ToUpper().ToCharArray();
+            return string.Join(" ", chars);
         }
-        else
+
+        public static Direction DirectionTo(this Vector3 vector, Vector3 target)
         {
-            return direction.y > 0
-                ? Direction.Up
-                : Direction.Down;
+            Vector3 direction = (target - vector).normalized;
+            float x = Mathf.Abs(direction.x);
+            float y = Mathf.Abs(direction.y);
+
+            if (x > y)
+            {
+                return direction.x > 0
+                    ? Direction.Right
+                    : Direction.Left;
+            }
+            else
+            {
+                return direction.y > 0
+                    ? Direction.Up
+                    : Direction.Down;
+            }
         }
     }
 }

@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CustomizationPart
+namespace Zomlypse.Enums
 {
-    None,
-    Head,
-    Hair, 
-    Eyes,
-    Beard
+    public enum CustomizationPart
+    {
+        None,
+        Head,
+        Hair,
+        Eyes,
+        Beard
+    }
 }
