@@ -5,14 +5,16 @@ namespace Zomlypse
     public class Entity
     {
         public Appearance Appearance { get; set; }
+        public string Name { get; set; }
 
-        public Entity() : this(new Appearance())
+        public Entity(string name) : this(name, new Appearance())
         {
             
         }
 
-        public Entity(Appearance appearance)
+        public Entity(string name, Appearance appearance)
         {
+            Name = name;
             Appearance = appearance;
         }
     }

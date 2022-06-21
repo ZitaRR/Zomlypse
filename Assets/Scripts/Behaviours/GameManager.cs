@@ -6,6 +6,8 @@ namespace Zomlypse.Behaviours
     {
         public static GameManager Instance { get; private set; }
 
+        public Entity Player { get; set; }
+
         private void Awake()
         {
             if (Instance != null)

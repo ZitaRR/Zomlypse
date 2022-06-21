@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zomlypse.Enums;
@@ -27,7 +28,7 @@ namespace Zomlypse.Behaviours
 
         private void Awake()
         {
-            entity = new Entity();
+            entity = new Entity("Player");
             card = GetComponentInChildren<Card>();
         }
 
@@ -136,6 +137,18 @@ namespace Zomlypse.Behaviours
             {
                 Destroy(customizationContent.transform.GetChild(i).gameObject);
             }
+        }
+
+        public void Create(TMP_InputField input)
+        {
+            if (string.IsNullOrEmpty(input.text))
+            {
+                throw new ArgumentException($"{nameof(name)} cannot be empty or null");
+            }
+
+            entity.Name = input.text;
+            GameManager.Instance.Player = entity;
+            SceneLoader.LoadScene("SampleScene");
         }
     }
 }
