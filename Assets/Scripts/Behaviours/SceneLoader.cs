@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,7 +9,12 @@ namespace Zomlypse.Behaviours
 {
     public class SceneLoader : MonoBehaviour
     {
-        private static string sceneName;
+        private const string LOADING_SCENE = "LoadingScene";
+
+        public static string Current { get; private set; }
+
+        public static event Action<string> OnActivation;
+        public static event Action<string> OnDeactivation;
 
         [Header("Settings")]
         [SerializeField]
@@ -21,6 +27,11 @@ namespace Zomlypse.Behaviours
         private TextMeshProUGUI status;
 
         private CanvasGroup canvas;
+
+        static SceneLoader()
+        {
+            Current = SceneManager.GetActiveScene().name;
+        }
 
         private void Awake()
         {
@@ -37,7 +48,7 @@ namespace Zomlypse.Behaviours
         private IEnumerator Load()
         {
             yield return StartCoroutine(SetAlpha(1f, fadeDuration));
-            AsyncOperation loading = SceneManager.LoadSceneAsync(sceneName);
+            AsyncOperation loading = SceneManager.LoadSceneAsync(Current);
             loading.allowSceneActivation = false;
 
             while (!loading.isDone)
@@ -57,6 +68,7 @@ namespace Zomlypse.Behaviours
         private IEnumerator Unload(AsyncOperation loading)
         {
             yield return StartCoroutine(SetAlpha(0f, fadeDuration));
+            OnActivation?.Invoke(Current);
             loading.allowSceneActivation = true;
         }
 
@@ -77,8 +89,9 @@ namespace Zomlypse.Behaviours
 
         public static void LoadScene(string sceneName)
         {
-            SceneLoader.sceneName = sceneName;
-            SceneManager.LoadScene("LoadingScene");
+            OnDeactivation?.Invoke(Current);
+            Current = sceneName;
+            SceneManager.LoadScene(LOADING_SCENE);
         }
     }
 }
