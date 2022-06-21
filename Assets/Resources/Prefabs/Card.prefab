@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 3261792317791714770}
   - component: {fileID: 3261792317791714771}
   - component: {fileID: 7888044679459150830}
+  - component: {fileID: 3143464679156445707}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -361,6 +362,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 0.75
+--- !u!114 &3143464679156445707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3261792317791714781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a1498b73bc9604692999e5727db586, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  head: {fileID: 3261792316908457316}
+  hair: {fileID: 3261792316726741887}
+  eyes: {fileID: 3261792316868128856}
+  beard: {fileID: 3261792318520577577}
 --- !u!1 &3261792318520577579
 GameObject:
   m_ObjectHideFlags: 0

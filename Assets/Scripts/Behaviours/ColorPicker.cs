@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zomlypse.Extensions;
 
-namespace Zomlypse
+namespace Zomlypse.Behaviours
 {
     public class ColorPicker : MonoBehaviour
     {

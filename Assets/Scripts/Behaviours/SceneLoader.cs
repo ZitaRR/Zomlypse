@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Zomlypse
+namespace Zomlypse.Behaviours
 {
     public class SceneLoader : MonoBehaviour
     {

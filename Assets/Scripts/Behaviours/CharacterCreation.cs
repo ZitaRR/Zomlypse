@@ -3,48 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zomlypse.Enums;
 
-namespace Zomlypse
+namespace Zomlypse.Behaviours
 {
     public class CharacterCreation : MonoBehaviour
     {
-        private int HairIndex
-        {
-            get => hairIndex;
-            set
-            {
-                if (value < 0 && value >= hair.Length)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                }
-
-                hairIndex = value;
-                activeHair.sprite = hair[hairIndex];
-            }
-        }
-        private int BeardIndex
-        {
-            get => beardIndex;
-            set
-            {
-                if (value < 0 && value >= beards.Length)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                }
-
-                beardIndex = value;
-                activeBeard.sprite = beards[beardIndex];
-            }
-        }
         public bool IsDetailedCustomizationActive
             => current == CustomizationPart.Hair || current == CustomizationPart.Beard;
 
-        [Header("Sprites")]
-        [SerializeField]
-        private Sprite[] hair;
-        [SerializeField]
-        private Sprite[] beards;
-
-        [Header("Misc")]
         [SerializeField]
         private RectTransform customizationPanel;
         [SerializeField]
@@ -56,41 +21,27 @@ namespace Zomlypse
         [SerializeField]
         private RectTransform optionsPanel;
 
-        private Image activeHair;
-        private Image activeBeard;
-        private Image activeEyes;
-        private Image activeHead;
-        private int hairIndex;
-        private int beardIndex;
+        private Entity entity;
+        private Card card;
         private CustomizationPart current;
 
         private void Awake()
         {
-            activeHair = GameObject.FindGameObjectWithTag("Hair").GetComponent<Image>();
-            activeBeard = GameObject.FindGameObjectWithTag("Beard").GetComponent<Image>();
-            activeEyes = GameObject.FindGameObjectWithTag("Eyes").GetComponent<Image>();
-            activeHead = GameObject.FindGameObjectWithTag("Head").GetComponent<Image>();
+            entity = new Entity();
+            card = GetComponentInChildren<Card>();
         }
 
         private void Start()
         {
-            HairIndex = 0;
-            BeardIndex = 0;
+            entity.Appearance.OnChange += (appearance) => card.Apply(appearance);
+            card.Apply(entity.Appearance);
 
             SetCustomizationOption(0);
         }
 
         public void SetCustomizationIndex(int index = 0)
         {
-            switch (colorPicker.Image.name)
-            {
-                case "Hair":
-                    HairIndex = index;
-                    break;
-                case "Beard":
-                    BeardIndex = index;
-                    break;
-            }
+            entity.Appearance.Load(current, index);
         }
 
         public void SetCustomizationOption(int index)
@@ -98,79 +49,75 @@ namespace Zomlypse
             switch (index)
             {
                 case 0:
-                    colorPicker.Attach(activeHead);
+                    colorPicker.Attach(card.Head);
                     PopulateCustomizationContent();
+                    current = CustomizationPart.Head;
                     break;
                 case 1:
-                    colorPicker.Attach(activeHair);
+                    colorPicker.Attach(card.Hair);
                     PopulateCustomizationContent(CustomizationPart.Hair);
+                    current = CustomizationPart.Hair;
                     break;
                 case 2:
-                    colorPicker.Attach(activeEyes);
+                    colorPicker.Attach(card.Eyes);
                     PopulateCustomizationContent();
+                    current = CustomizationPart.Eyes;
                     break;
                 case 3:
-                    colorPicker.Attach(activeBeard);
+                    colorPicker.Attach(card.Beard);
                     PopulateCustomizationContent(CustomizationPart.Beard);
+                    current = CustomizationPart.Beard;
                     break;
             }
         }
 
         private void PopulateCustomizationContent(CustomizationPart part = CustomizationPart.None)
         {
+            Sprite[] sprites = new Sprite[0];
             switch (part)
             {
                 case CustomizationPart.Hair:
-                    if (!UI.IsTweening(customizationPanel, out LTDescr ltd) && IsDetailedCustomizationActive)
-                    {
-                        UI.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(hair));
-                        break;
-                    }
-                    else if (ltd == null && IsDetailedCustomizationActive)
-                    {
-                        UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
-                        break;
-                    }
-
-                    PopulateCustomizationContent(hair);
-                    UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
+                    sprites = Resources.LoadAll<Sprite>(Appearance.HAIRS);
                     break;
                 case CustomizationPart.Beard:
-                    if (!UI.IsTweening(customizationPanel, out ltd) && IsDetailedCustomizationActive)
-                    {
-                        UI.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(beards));
-                        break;
-                    }
-                    else if (ltd == null && IsDetailedCustomizationActive)
-                    {
-                        UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
-                        break;
-                    }
-
-                    PopulateCustomizationContent(beards);
-                    UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
-                    break;
-                default:
-                    if (!IsDetailedCustomizationActive)
-                    {
-                        break;
-                    }
-
-                    UI.Sweep(customizationPanel, optionsPanel, Direction.Normal, action: ClearCustomizationContent);
+                    sprites = Resources.LoadAll<Sprite>(Appearance.BEARDS);
                     break;
             }
 
-            current = part;
+            if (sprites.Length <= 0)
+            {
+                if (!IsDetailedCustomizationActive)
+                {
+                    return;
+                }
+
+                UI.Sweep(customizationPanel, optionsPanel, Direction.Normal, action: ClearCustomizationContent);
+                return;
+            }
+
+            if (!UI.IsTweening(customizationPanel, out LTDescr ltd) && IsDetailedCustomizationActive)
+            {
+                UI.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(sprites));
+                return;
+            }
+            else if (ltd == null && IsDetailedCustomizationActive)
+            {
+                UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
+                return;
+            }
+
+            PopulateCustomizationContent(sprites);
+            UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
         }
 
-        private void PopulateCustomizationContent(Sprite[] content)
+        private void PopulateCustomizationContent(Sprite[] sprites)
         {
             ClearCustomizationContent();
-            for (int i = 0; i < content.Length; i++)
+            for (int i = 0; i < sprites.Length; i++)
             {
-                GameObject card = CreateCustomizationCard(content[i]);
+                GameObject card = CreateCustomizationCard(sprites[i]);
                 Button button = card.GetComponent<Button>();
-                int temp = i;
+                int temp = i + 1;
                 button.onClick.AddListener(() => SetCustomizationIndex(temp));
             }
         }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Zomlypse
+namespace Zomlypse.Behaviours
 {
     public class GameManager : MonoBehaviour
     {
