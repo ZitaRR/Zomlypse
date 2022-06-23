@@ -4,17 +4,24 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using Zomlypse.Enums;
 
 namespace Zomlypse.Behaviours
 {
     public class SceneLoader : MonoBehaviour
     {
         private const string LOADING_SCENE = "LoadingScene";
+        private const string MENU_PREFIX = "Menu_";
+        private const string PLAY_PREFIX = "Play_";
 
         public static string Current { get; private set; }
+        public static SceneState State { get; private set; }
 
-        public static event Action<string> OnActivation;
-        public static event Action<string> OnDeactivation;
+        public static event Action<string, SceneState> OnActivation;
+        public static event Action<string, SceneState> OnDeactivation;
+        private static string targetScene;
+        private static string previousScene;
+        private static SceneState previousState;
 
         [Header("Settings")]
         [SerializeField]
@@ -31,6 +38,7 @@ namespace Zomlypse.Behaviours
         static SceneLoader()
         {
             Current = SceneManager.GetActiveScene().name;
+            State = GetStateFromSceneName(Current);
         }
 
         private void Awake()
@@ -48,7 +56,7 @@ namespace Zomlypse.Behaviours
         private IEnumerator Load()
         {
             yield return StartCoroutine(SetAlpha(1f, fadeDuration));
-            AsyncOperation loading = SceneManager.LoadSceneAsync(Current);
+            AsyncOperation loading = SceneManager.LoadSceneAsync(targetScene);
             loading.allowSceneActivation = false;
 
             while (!loading.isDone)
@@ -68,7 +76,9 @@ namespace Zomlypse.Behaviours
         private IEnumerator Unload(AsyncOperation loading)
         {
             yield return StartCoroutine(SetAlpha(0f, fadeDuration));
-            OnActivation?.Invoke(Current);
+            Current = targetScene;
+            State = GetStateFromSceneName(Current);
+            OnActivation?.Invoke(Current, State);
             loading.allowSceneActivation = true;
         }
 
@@ -87,10 +97,42 @@ namespace Zomlypse.Behaviours
             canvas.alpha = alpha;
         }
 
+        public static SceneState GetStateFromSceneName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException($"{nameof(name)} cannot be empty or null");
+            }
+
+            int index = name.IndexOf('_') + 1;
+            if (index <= -1)
+            {
+                throw new ArgumentException("Invalid scene name");
+            }
+
+            string prefix = name.Substring(0, index);
+            switch (prefix)
+            {
+                case LOADING_SCENE:
+                    return SceneState.Loading;
+                case MENU_PREFIX:
+                    return SceneState.Menu;
+                case PLAY_PREFIX:
+                    return SceneState.Active;
+                default:
+                    throw new ArgumentException("Invalid scene name");
+            }
+        }
+
         public static void LoadScene(string sceneName)
         {
-            OnDeactivation?.Invoke(Current);
-            Current = sceneName;
+            targetScene = sceneName;
+            previousScene = Current;
+            previousState = State;
+            Current = LOADING_SCENE;
+            State = SceneState.Loading;
+
+            OnDeactivation?.Invoke(previousScene, previousState);
             SceneManager.LoadScene(LOADING_SCENE);
         }
     }
