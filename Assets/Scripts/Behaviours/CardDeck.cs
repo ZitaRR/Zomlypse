@@ -23,14 +23,6 @@ namespace Zomlypse.Behaviours
             StartCoroutine(WaitForFrame());
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                AddCard();
-            }
-        }
-
         private IEnumerator WaitForFrame()
         {
             yield return new WaitForEndOfFrame();
