@@ -1,6 +1,4 @@
-﻿using Zomlypse.Behaviours;
-
-namespace Zomlypse
+﻿namespace Zomlypse
 {
     public class Entity
     {

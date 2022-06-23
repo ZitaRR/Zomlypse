@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Zomlypse.Enums
+﻿namespace Zomlypse.Enums
 {
     public enum CustomizationPart
     {

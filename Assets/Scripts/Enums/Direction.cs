@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace Zomlypse.Enums
+﻿namespace Zomlypse.Enums
 {
     public enum Direction
     {
