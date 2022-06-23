@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -457,9 +457,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1471697312}
     m_Modifications:
+    - target: {fileID: 1386289802943776607, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_AspectMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5984957591123779949, guid: f3965358e439af94083688531ad5f33b,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 276.71103
+      objectReference: {fileID: 0}
+    - target: {fileID: 5984957591123779949, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5984957592014295508, guid: f3965358e439af94083688531ad5f33b,
@@ -592,6 +602,16 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9100334403473064660, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0015258789
+      objectReference: {fileID: 0}
+    - target: {fileID: 9100334403564308957, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0014038086
+      objectReference: {fileID: 0}
     - target: {fileID: 9100334404046647081, guid: f3965358e439af94083688531ad5f33b,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -601,6 +621,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9100334404175898634, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0014038086
       objectReference: {fileID: 0}
     - target: {fileID: 9100334404262327025, guid: f3965358e439af94083688531ad5f33b,
         type: 3}

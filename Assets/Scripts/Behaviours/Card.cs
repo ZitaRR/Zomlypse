@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Zomlypse.Helpers;
 
 namespace Zomlypse.Behaviours
 {
@@ -32,10 +33,19 @@ namespace Zomlypse.Behaviours
         private Image beard;
 
         private Image card;
+        private CardDeck deck;
+        private HoverEffect hover;
 
         private void Awake()
         {
             card = GetComponent<Image>();
+            hover = GetComponent<HoverEffect>();
+            deck = GetComponentInParent<CardDeck>();
+
+            if (deck == null)
+            {
+                hover.enabled = false;
+            }
         }
 
         private void Start()
