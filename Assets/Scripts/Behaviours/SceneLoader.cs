@@ -58,12 +58,21 @@ namespace Zomlypse.Behaviours
             yield return StartCoroutine(SetAlpha(1f, fadeDuration));
             AsyncOperation loading = SceneManager.LoadSceneAsync(targetScene);
             loading.allowSceneActivation = false;
+            loading.completed += (_) =>
+            {
+                Scene scene = SceneManager.GetSceneByName(targetScene);
+                SceneManager.SetActiveScene(scene);
+
+                Current = targetScene;
+                State = GetStateFromSceneName(Current);
+                OnActivation?.Invoke(Current, State);
+            };
 
             while (!loading.isDone)
             {
                 float progress = (loading.progress + .1f);
                 loadingBar.value = progress;
-                if (progress >= 1)
+                if (progress >= 1f)
                 {
                     break;
                 }
@@ -76,9 +85,6 @@ namespace Zomlypse.Behaviours
         private IEnumerator Unload(AsyncOperation loading)
         {
             yield return StartCoroutine(SetAlpha(0f, fadeDuration));
-            Current = targetScene;
-            State = GetStateFromSceneName(Current);
-            OnActivation?.Invoke(Current, State);
             loading.allowSceneActivation = true;
         }
 

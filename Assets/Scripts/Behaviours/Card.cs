@@ -55,10 +55,17 @@ namespace Zomlypse.Behaviours
 
         public void Apply(Appearance appearance)
         {
-            head.sprite = appearance.Head;
-            hair.sprite = appearance.Hair;
-            eyes.sprite = appearance.Eyes;
-            beard.sprite = appearance.Beard;
+            head.sprite = appearance.Head.Sprite;
+            head.color = appearance.Head.Color;
+
+            hair.sprite = appearance.Hair.Sprite;
+            hair.color = appearance.Hair.Color;
+
+            eyes.sprite = appearance.Eyes.Sprite;
+            eyes.color = appearance.Eyes.Color;
+
+            beard.sprite = appearance.Beard.Sprite;
+            beard.color = appearance.Beard.Color;
         }
 
         public void SetTransparent(bool value)

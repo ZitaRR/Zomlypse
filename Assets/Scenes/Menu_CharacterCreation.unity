@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -187,12 +187,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &148408823 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9100334404681097539, guid: f3965358e439af94083688531ad5f33b,
+    type: 3}
+  m_PrefabInstance: {fileID: 9100334403879019151}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &724646123 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9100334403255048804, guid: f3965358e439af94083688531ad5f33b,
     type: 3}
   m_PrefabInstance: {fileID: 9100334403879019151}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &968017519 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9100334404097561561, guid: f3965358e439af94083688531ad5f33b,
+    type: 3}
+  m_PrefabInstance: {fileID: 9100334403879019151}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbad5227169e7a4788b7ec5f2726811, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1299995630
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,6 +501,16 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5984957592014295508, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000015258789
+      objectReference: {fileID: 0}
+    - target: {fileID: 5984957592014295508, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9100334403255048804, guid: f3965358e439af94083688531ad5f33b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -651,7 +685,32 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1454776662}
+      objectReference: {fileID: 968017519}
+    - target: {fileID: 9100334404631188001, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Play_SampleScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 9100334404631188001, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Create
+      objectReference: {fileID: 0}
+    - target: {fileID: 9100334404631188001, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9100334404631188001, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: TMPro.TMP_InputField, Unity.TextMeshPro
+      objectReference: {fileID: 0}
+    - target: {fileID: 9100334404631188001, guid: f3965358e439af94083688531ad5f33b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 148408823}
     - target: {fileID: 9100334404823403466, guid: f3965358e439af94083688531ad5f33b,
         type: 3}
       propertyPath: m_AnchorMax.x

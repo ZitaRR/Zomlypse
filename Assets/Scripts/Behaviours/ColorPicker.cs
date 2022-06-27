@@ -1,14 +1,13 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zomlypse.Enums;
 using Zomlypse.Extensions;
 
 namespace Zomlypse.Behaviours
 {
     public class ColorPicker : MonoBehaviour
     {
-        public Image Image => image;
-
         [SerializeField]
         private TextMeshProUGUI header;
         [SerializeField]
@@ -18,7 +17,7 @@ namespace Zomlypse.Behaviours
         [SerializeField]
         private Slider blue;
 
-        private Image image;
+        private AppearancePart part;
         private TextMeshProUGUI redText;
         private TextMeshProUGUI greenText;
         private TextMeshProUGUI blueText;
@@ -37,29 +36,29 @@ namespace Zomlypse.Behaviours
             blue.onValueChanged.AddListener(delegate { UpdateColor(); });
         }
 
-        public void Attach(Image image)
+        public void Attach(AppearancePart part)
         {
-            this.image = image;
-            header.text = Image.name.ToHeader();
+            this.part = part;
+            header.text = part.Sprite.name.ToHeader();
 
-            red.SetValueWithoutNotify(Image.color.r);
-            green.SetValueWithoutNotify(Image.color.g);
-            blue.SetValueWithoutNotify(Image.color.b);
+            red.SetValueWithoutNotify(part.Color.r);
+            green.SetValueWithoutNotify(part.Color.g);
+            blue.SetValueWithoutNotify(part.Color.b);
 
             UpdateColorText();
         }
 
         private void UpdateColor()
         {
-            image.color = new Color(red.value, green.value, blue.value);
+            part.Color = new Color(red.value, green.value, blue.value);
             UpdateColorText();
         }
 
         private void UpdateColorText()
         {
-            redText.text = (image.color.r * 255).ToString("F0");
-            greenText.text = (image.color.g * 255).ToString("F0");
-            blueText.text = (image.color.b * 255).ToString("F0");
+            redText.text = (part.Color.r * 255).ToString("F0");
+            greenText.text = (part.Color.g * 255).ToString("F0");
+            blueText.text = (part.Color.b * 255).ToString("F0");
         }
     }
 }

@@ -749,4 +749,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397edbc0f780ce348a04f051d0c1eb8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: 3261792317791714780, guid: 4911e76106ffe85469e258cd6b699fda, type: 3}
+  cardRect: {fileID: 3261792317791714780, guid: 4911e76106ffe85469e258cd6b699fda,
+    type: 3}

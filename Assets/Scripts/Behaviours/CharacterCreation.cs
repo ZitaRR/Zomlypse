@@ -34,7 +34,7 @@ namespace Zomlypse.Behaviours
 
         private void Start()
         {
-            entity.Appearance.OnChange += (appearance) => card.Apply(appearance);
+            entity.Appearance.OnChange += (appearance, _) => card.Apply(appearance);
             card.Apply(entity.Appearance);
 
             SetCustomizationOption(0);
@@ -50,24 +50,24 @@ namespace Zomlypse.Behaviours
             switch (index)
             {
                 case 0:
-                    colorPicker.Attach(card.Head);
-                    PopulateCustomizationContent();
                     current = CustomizationPart.Head;
+                    colorPicker.Attach(entity.Appearance.Head);
+                    PopulateCustomizationContent();
                     break;
                 case 1:
-                    colorPicker.Attach(card.Hair);
-                    PopulateCustomizationContent(CustomizationPart.Hair);
                     current = CustomizationPart.Hair;
+                    colorPicker.Attach(entity.Appearance.Hair);
+                    PopulateCustomizationContent(CustomizationPart.Hair);
                     break;
                 case 2:
-                    colorPicker.Attach(card.Eyes);
-                    PopulateCustomizationContent();
                     current = CustomizationPart.Eyes;
+                    colorPicker.Attach(entity.Appearance.Eyes);
+                    PopulateCustomizationContent();
                     break;
                 case 3:
-                    colorPicker.Attach(card.Beard);
-                    PopulateCustomizationContent(CustomizationPart.Beard);
                     current = CustomizationPart.Beard;
+                    colorPicker.Attach(entity.Appearance.Beard);
+                    PopulateCustomizationContent(CustomizationPart.Beard);
                     break;
             }
         }
@@ -148,7 +148,7 @@ namespace Zomlypse.Behaviours
 
             entity.Name = input.text;
             GameManager.Instance.Player = entity;
-            SceneLoader.LoadScene("SampleScene");
+            SceneLoader.LoadScene("Play_SampleScene");
         }
     }
 }
