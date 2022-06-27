@@ -24,7 +24,7 @@ Mockup designs for different views, this will be updated continuously.
 
 #### Main Game View
 
-![game](https://github.com/ZitaRR/Zomlypse/blob/master/Resources/game_window.png)
+
 
 #### Character Creation View
 
