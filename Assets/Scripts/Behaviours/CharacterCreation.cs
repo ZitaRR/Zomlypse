@@ -50,24 +50,24 @@ namespace Zomlypse.Behaviours
             switch (index)
             {
                 case 0:
-                    current = CustomizationPart.Head;
                     colorPicker.Attach(entity.Appearance.Head);
                     PopulateCustomizationContent();
+                    current = CustomizationPart.Head;
                     break;
                 case 1:
-                    current = CustomizationPart.Hair;
                     colorPicker.Attach(entity.Appearance.Hair);
                     PopulateCustomizationContent(CustomizationPart.Hair);
+                    current = CustomizationPart.Hair;
                     break;
                 case 2:
-                    current = CustomizationPart.Eyes;
                     colorPicker.Attach(entity.Appearance.Eyes);
                     PopulateCustomizationContent();
+                    current = CustomizationPart.Eyes;
                     break;
                 case 3:
-                    current = CustomizationPart.Beard;
                     colorPicker.Attach(entity.Appearance.Beard);
                     PopulateCustomizationContent(CustomizationPart.Beard);
+                    current = CustomizationPart.Beard;
                     break;
             }
         }
