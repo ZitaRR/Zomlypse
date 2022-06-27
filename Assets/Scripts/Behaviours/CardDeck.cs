@@ -26,14 +26,6 @@ namespace Zomlypse.Behaviours
             StartCoroutine(WaitForFrame());
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                StartCoroutine(AddCard(GameManager.Instance.Player));
-            }
-        }
-
         private IEnumerator WaitForFrame()
         {
             yield return new WaitForEndOfFrame();
