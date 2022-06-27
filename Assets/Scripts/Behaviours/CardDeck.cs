@@ -14,6 +14,7 @@ namespace Zomlypse.Behaviours
         private Vector2 origin;
         private float deckWidth;
         private float cardWidth;
+        private bool initialized;
 
         private void Awake()
         {
@@ -34,6 +35,8 @@ namespace Zomlypse.Behaviours
 
             cardRect.sizeDelta = new Vector2(deck.rect.height * .75f, 0f);
             origin = new Vector2(deck.rect.min.x + cardWidth / 2, 0f);
+
+            initialized = true;
         }
 
         private void AdjustCards()
@@ -48,8 +51,20 @@ namespace Zomlypse.Behaviours
             }
         }
 
-        public void AddCard(Entity entity)
+        private IEnumerator EnsureInitialization()
         {
+            if (initialized)
+            {
+                yield return null;
+            }
+
+            yield return new WaitUntil(() => initialized == true);
+        }
+
+        public IEnumerator AddCard(Entity entity)
+        {
+            yield return StartCoroutine(EnsureInitialization());
+
             RectTransform rect = Instantiate(cardRect, deck);
             rect.GetComponent<Card>().Apply(entity.Appearance);
             cards.Add(rect);

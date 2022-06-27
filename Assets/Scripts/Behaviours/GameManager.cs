@@ -34,7 +34,10 @@ namespace Zomlypse.Behaviours
             if (state == SceneState.Active)
             {
                 deck = GameObject.Find("Deck").GetComponent<CardDeck>();
-                deck.AddCard(Player);
+                for (int i = 0; i < 10; i++)
+                {
+                    StartCoroutine(deck.AddCard(Player));
+                }
             }
         }
 

@@ -4,11 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Eyes
-  - Hair
-  - Beard
   - ColorPicker
-  - Head
   layers:
   - Default
   - TransparentFX
