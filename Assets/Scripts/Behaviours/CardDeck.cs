@@ -26,6 +26,14 @@ namespace Zomlypse.Behaviours
             StartCoroutine(WaitForFrame());
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                StartCoroutine(AddCard(GameManager.Instance.Player));
+            }
+        }
+
         private IEnumerator WaitForFrame()
         {
             yield return new WaitForEndOfFrame();
@@ -42,9 +50,9 @@ namespace Zomlypse.Behaviours
         private void AdjustCards()
         {
             int cards = this.cards.Count;
-            float spacing = (deckWidth - cardWidth) / (cards - 1);
+            float spacing = (deckWidth - cardWidth) / (Mathf.Clamp(cards - 1, 1, float.MaxValue));
         
-            for (int i = 1; i < cards; i++)
+            for (int i = 0; i < cards; i++)
             {
                 RectTransform current = this.cards[i];
                 current.anchoredPosition = new Vector2(origin.x + spacing * i, origin.y);
@@ -61,14 +69,17 @@ namespace Zomlypse.Behaviours
             yield return new WaitUntil(() => initialized == true);
         }
 
-        public IEnumerator AddCard(Entity entity)
+        public IEnumerator AddCard(params Entity[] entities)
         {
             yield return StartCoroutine(EnsureInitialization());
 
-            RectTransform rect = Instantiate(cardRect, deck);
-            rect.GetComponent<Card>().Apply(entity.Appearance);
-            cards.Add(rect);
-            AdjustCards();
+            for (int i = 0; i < entities.Length; i++)
+            {
+                RectTransform rect = Instantiate(cardRect, deck);
+                rect.GetComponent<Card>().Apply(entities[i].Appearance);
+                cards.Add(rect);
+                AdjustCards();
+            }
         } 
     }
 }
