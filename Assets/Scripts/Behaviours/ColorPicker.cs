@@ -39,7 +39,7 @@ namespace Zomlypse.Behaviours
         public void Attach(AppearancePart part)
         {
             this.part = part;
-            header.text = part.Sprite.name.ToHeader();
+            header.text = part.Part.ToHeader();
 
             red.SetValueWithoutNotify(part.Color.r);
             green.SetValueWithoutNotify(part.Color.g);

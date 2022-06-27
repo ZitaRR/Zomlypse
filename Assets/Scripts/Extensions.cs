@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zomlypse.Enums;
 
 namespace Zomlypse.Extensions
@@ -9,6 +10,11 @@ namespace Zomlypse.Extensions
         {
             char[] chars = str.ToUpper().ToCharArray();
             return string.Join(" ", chars);
+        }
+
+        public static string ToHeader(this Enum type)
+        {
+            return ToHeader(type.ToString());
         }
 
         public static Direction DirectionTo(this Vector3 vector, Vector3 target)

@@ -21,10 +21,10 @@ namespace Zomlypse
 
         public Appearance()
         {
-            Head = new AppearancePart(Resources.Load<Sprite>(DEFAULT_HEAD_PATH));
-            Hair = new AppearancePart(Resources.Load<Sprite>(EMPTY_PATH));
-            Eyes = new AppearancePart(Resources.Load<Sprite>(EYES_PATH));
-            Beard = new AppearancePart(Resources.Load<Sprite>(EMPTY_PATH));
+            Head = new AppearancePart(Load(DEFAULT_HEAD_PATH), CustomizationPart.Head);
+            Hair = new AppearancePart(Load(EMPTY_PATH), CustomizationPart.Hair);
+            Eyes = new AppearancePart(Load(EYES_PATH), CustomizationPart.Eyes);
+            Beard = new AppearancePart(Load(EMPTY_PATH), CustomizationPart.Beard);
 
             Head.OnChange += (part) => OnChange?.Invoke(this, part);
             Hair.OnChange += (part) => OnChange?.Invoke(this, part);
