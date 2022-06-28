@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zomlypse.Enums;
+using Zomlypse.States;
 
 namespace Zomlypse.Behaviours
 {
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
+
+        public static event Action OnFrame;
 
         public Entity Player { get; set; }
 
@@ -25,14 +29,22 @@ namespace Zomlypse.Behaviours
 
         private void Start()
         {
+            StateMachine.SetState<MenuState>();
+
             SceneLoader.OnActivation += SceneActivation;
             SceneLoader.OnDeactivation += SceneDeactivation;
+        }
+
+        private void Update()
+        {
+            OnFrame?.Invoke();
         }
 
         private void SceneActivation(string scene, SceneState state)
         {
             if (state == SceneState.Active)
             {
+                StateMachine.SetState<PlayState>();
                 deck = GameObject.Find("Deck").GetComponent<CardDeck>();
                 StartCoroutine(deck.AddCard(Player));
             }

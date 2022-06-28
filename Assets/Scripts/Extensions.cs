@@ -36,5 +36,10 @@ namespace Zomlypse.Extensions
                     : Direction.Down;
             }
         }
+
+        public static string FormatDate(this DateTime date)
+        {
+            return date.ToString("yyyy-MM-dd HH:mm");
+        }
     }
 }
