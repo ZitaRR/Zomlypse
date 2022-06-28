@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ColorPicker
   - GameManager
+  - UI
   layers:
   - Default
   - TransparentFX
