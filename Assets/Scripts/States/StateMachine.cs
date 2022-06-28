@@ -15,6 +15,7 @@ namespace Zomlypse.States
                 return;
             }
 
+            State?.Stop();
             Debug.Log($"Switched from state [{State?.Name ?? "None"}] to [{state.Name}]");
             State = state;
             State.Start();

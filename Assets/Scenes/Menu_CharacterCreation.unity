@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 1454776664}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -390,7 +390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forwardTime: 0
-  speed: 0
+  speed: 10
 --- !u!1 &1471697308
 GameObject:
   m_ObjectHideFlags: 0

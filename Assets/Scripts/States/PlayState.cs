@@ -7,12 +7,14 @@ namespace Zomlypse.States
         public override void Start()
         {
             base.Start();
+            UI.Enable("Play");
             game.Play();
         }
 
         public override void Stop()
         {
             base.Stop();
+            UI.Disable("Play");
             game.Pause();
         }
 

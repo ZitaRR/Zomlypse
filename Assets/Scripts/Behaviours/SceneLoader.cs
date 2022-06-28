@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using Zomlypse.Enums;
+using Zomlypse.States;
 
 namespace Zomlypse.Behaviours
 {
@@ -138,6 +139,7 @@ namespace Zomlypse.Behaviours
             Current = LOADING_SCENE;
             State = SceneState.Loading;
 
+            StateMachine.SetState<LoadState>();
             OnDeactivation?.Invoke(previousScene, previousState);
             SceneManager.LoadScene(LOADING_SCENE);
         }
