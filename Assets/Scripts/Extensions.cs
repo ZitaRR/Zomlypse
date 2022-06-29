@@ -37,9 +37,14 @@ namespace Zomlypse.Extensions
             }
         }
 
-        public static string FormatDate(this DateTime date)
+        public static string FormatDate(this DateTime date, IFormatProvider format)
         {
-            return date.ToString("yyyy-MM-dd HH:mm");
+            return $"{date.DayOfWeek}, {date.ToString("d MMMM yyyy", format)}";
+        }
+
+        public static string FormatTime(this DateTime date, IFormatProvider format)
+        {
+            return date.ToString("HH:mm", format);
         }
     }
 }
