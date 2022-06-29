@@ -1,8 +1,10 @@
 ﻿using System;
-using UnityEngine;
-using TMPro;
-using Zomlypse.Extensions;
 using System.Globalization;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using Zomlypse.Enums;
+using Zomlypse.Extensions;
 
 namespace Zomlypse.Behaviours
 {
@@ -20,21 +22,39 @@ namespace Zomlypse.Behaviours
                 timeDisplay.text = current.FormatTime(format);
             }
         }
+        public GamePace Pace
+        {
+            get => pace;
+            set
+            {
+                previous = pace;
+                pace = value;
+            }
+        }
 
         [Header("UI")]
         [SerializeField]
         private TextMeshProUGUI dateDisplay;
         [SerializeField]
         private TextMeshProUGUI timeDisplay;
-
-        [Header("Misc")]
         [SerializeField]
-        private bool forwardTime;
+        private Button pauseButton;
         [SerializeField]
-        private float speed;
+        private Button normalButton;
+        [SerializeField]
+        private Button fastButton;
 
         private DateTime current;
         private IFormatProvider format;
+        private GamePace pace;
+        private GamePace previous;
+
+        private void Awake()
+        {
+            pauseButton.onClick.AddListener(Pause);
+            normalButton.onClick.AddListener(() => Play());
+            fastButton.onClick.AddListener(() => Play(GamePace.Fast));
+        }
 
         private void Start()
         {
@@ -44,27 +64,27 @@ namespace Zomlypse.Behaviours
 
         private void FixedUpdate()
         {
-            if (!forwardTime)
+            if (pace == GamePace.Pause)
             {
                 return;
             }
 
-            Current = Current.AddMinutes(speed);
+            Current = Current.AddMinutes((int)pace);
         }
 
-        public void Play()
+        public void Play(GamePace pace = GamePace.Normal)
         {
-            forwardTime = true;
+            this.pace = pace;
         }
 
         public void Pause()
         {
-            forwardTime = false;
+            pace = GamePace.Pause;
         }
 
         public void TogglePlayPause()
         {
-            forwardTime = !forwardTime;
+            Pace = previous;
         }
     }
 }
