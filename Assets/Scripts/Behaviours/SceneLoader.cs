@@ -112,7 +112,7 @@ namespace Zomlypse.Behaviours
             }
 
             int index = name.IndexOf('_') + 1;
-            if (index <= -1)
+            if (index <= 0)
             {
                 throw new ArgumentException("Invalid scene name");
             }
