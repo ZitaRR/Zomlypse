@@ -61,7 +61,7 @@ namespace Zomlypse.Behaviours
             yield return new WaitUntil(() => initialized == true);
         }
 
-        public IEnumerator AddCard(params Entity[] entities)
+        private IEnumerator AddCards(params Entity[] entities)
         {
             yield return StartCoroutine(EnsureInitialization());
 
@@ -73,5 +73,10 @@ namespace Zomlypse.Behaviours
                 AdjustCards();
             }
         } 
+
+        public void Add(params Entity[] entites)
+        {
+            StartCoroutine(AddCards(entites));
+        }
     }
 }

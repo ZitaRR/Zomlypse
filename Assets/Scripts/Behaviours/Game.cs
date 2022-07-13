@@ -69,7 +69,13 @@ namespace Zomlypse.Behaviours
                 return;
             }
 
+            DateTime previous = Current;
             Current = Current.AddMinutes((int)pace);
+
+            if (Current.Year > previous.Year)
+            {
+                GameManager.Instance.Notifications.Add($"Year {Current.Year}", $"Time has advanced, it is now year {Current.Year}.");
+            }
         }
 
         public void Play(GamePace pace = GamePace.Normal)

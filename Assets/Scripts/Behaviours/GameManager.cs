@@ -13,7 +13,12 @@ namespace Zomlypse.Behaviours
         public static event Action OnFrame;
 
         public Entity Player { get; set; }
+        public Notifications Notifications { get => notifications; }
+        public CardDeck Deck { get => deck; }
 
+        [SerializeField]
+        private Notifications notifications;
+        [SerializeField]
         private CardDeck deck;
 
         private void Awake()
@@ -56,8 +61,8 @@ namespace Zomlypse.Behaviours
             if (state == SceneState.Active)
             {
                 StateMachine.SetState<PlayState>();
-                deck = GameObject.Find("Deck").GetComponent<CardDeck>();
-                StartCoroutine(deck.AddCard(Player));
+
+                Deck.Add(Player);
             }
         }
 

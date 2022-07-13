@@ -29,7 +29,7 @@ namespace Zomlypse.Behaviours
             startPosition = new Vector2(Screen.safeArea.xMin - view.rect.width, 0f);   
         }
 
-        public IEnumerator AddNotification(string header, string description)
+        private IEnumerator AddNotification(string header, string description)
         {
             RectTransform rect = Instantiate(notification, startPosition, Quaternion.identity, view);
             notifications.Enqueue(rect);
@@ -92,6 +92,11 @@ namespace Zomlypse.Behaviours
 
                 UI.Move(rect, target);
             }
+        }
+
+        public void Add(string header, string description)
+        {
+            StartCoroutine(AddNotification(header, description));
         }
     }
 }
