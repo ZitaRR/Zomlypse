@@ -34,6 +34,8 @@ namespace Zomlypse.Behaviours
 
         private void Start()
         {
+            Debug.Log($"{entity.Appearance.Head.Color}, {entity.Appearance.Hair.Color}, {entity.Appearance.Eyes.Color}, {entity.Appearance.Beard.Color}");
+
             entity.Appearance.OnChange += (appearance, _) => card.Apply(appearance);
             card.Apply(entity.Appearance);
 

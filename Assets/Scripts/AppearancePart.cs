@@ -52,5 +52,20 @@ namespace Zomlypse
             Color = color;
             Part = part;
         }
+
+        public void Randomize()
+        {
+            switch (Part)
+            {
+                case CustomizationPart.Hair:
+                    Sprite = Resources.Load<Sprite>($"{Appearance.HAIRS}hair_{UnityEngine.Random.Range(1, Appearance.HairCount)}");
+                    break;
+                case CustomizationPart.Beard:
+                    Sprite = Resources.Load<Sprite>($"{Appearance.BEARDS}beard_{UnityEngine.Random.Range(1, Appearance.BeardCount)}");
+                    break;
+                default:
+                    throw new InvalidOperationException($"Custmization part must be of either {nameof(CustomizationPart.Hair)} or {nameof(CustomizationPart.Beard)}");
+            }
+        }
     }
 }
