@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Zomlypse.Enums;
+using Zomlypse.IO.Containers;
 
 namespace Zomlypse.Extensions
 {
@@ -45,6 +46,11 @@ namespace Zomlypse.Extensions
         public static string FormatTime(this DateTime date, IFormatProvider format)
         {
             return date.ToString("HH:mm", format);
+        }
+
+        public static Color32 ToColor32(this HexColor hex)
+        {
+            return new Color32(hex.RR, hex.GG, hex.BB, byte.MaxValue);
         }
     }
 }

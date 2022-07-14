@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Zomlypse.Enums;
+using Zomlypse.IO;
 using Zomlypse.States;
 
 namespace Zomlypse.Behaviours
@@ -32,6 +33,8 @@ namespace Zomlypse.Behaviours
             Instance = this;
             DontDestroyOnLoad(Instance);
 
+            FileManager.Initialize();
+
             Transform ui = GameObject.FindGameObjectWithTag("UI").transform;
             Component[] components = new Component[ui.childCount];
 
@@ -39,6 +42,7 @@ namespace Zomlypse.Behaviours
             {
                 components[i] = ui.GetChild(i);
             }
+
 
             UI.Initialize(components);
         }
