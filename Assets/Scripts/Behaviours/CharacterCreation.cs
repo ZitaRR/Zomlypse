@@ -21,28 +21,37 @@ namespace Zomlypse.Behaviours
         private ColorPicker colorPicker;
         [SerializeField]
         private RectTransform optionsPanel;
+        [SerializeField]
+        private Toggle maleToggle;
+        [SerializeField]
+        private Toggle femaleToggle;
 
-        private Entity entity;
+        private Appearance appearance;
         private Card card;
+        private CharacterInfo info;
         private CustomizationPart current;
+        private Gender gender;
 
         private void Awake()
         {
-            entity = new Entity("Player");
             card = GetComponentInChildren<Card>();
+
+            maleToggle.onValueChanged.AddListener((value) => gender = value ? Gender.Male : Gender.None);
+            femaleToggle.onValueChanged.AddListener((value) => gender = value ? Gender.Female : Gender.None);
         }
 
         private void Start()
         {
-            entity.Appearance.OnChange += (appearance, _) => card.Apply(appearance);
-            card.Apply(entity.Appearance);
+            appearance = Appearance.Random();
+            appearance.OnChange += (appearance, _) => card.Apply(appearance);
+            card.Apply(appearance);
 
             SetCustomizationOption(0);
         }
 
         public void SetCustomizationIndex(int index = 0)
         {
-            entity.Appearance.Load(current, index);
+            appearance.Load(current, index);
         }
 
         public void SetCustomizationOption(int index)
@@ -50,22 +59,22 @@ namespace Zomlypse.Behaviours
             switch (index)
             {
                 case 0:
-                    colorPicker.Attach(entity.Appearance.Head);
+                    colorPicker.Attach(appearance.Head);
                     PopulateCustomizationContent();
                     current = CustomizationPart.Head;
                     break;
                 case 1:
-                    colorPicker.Attach(entity.Appearance.Hair);
+                    colorPicker.Attach(appearance.Hair);
                     PopulateCustomizationContent(CustomizationPart.Hair);
                     current = CustomizationPart.Hair;
                     break;
                 case 2:
-                    colorPicker.Attach(entity.Appearance.Eyes);
+                    colorPicker.Attach(appearance.Eyes);
                     PopulateCustomizationContent();
                     current = CustomizationPart.Eyes;
                     break;
                 case 3:
-                    colorPicker.Attach(entity.Appearance.Beard);
+                    colorPicker.Attach(appearance.Beard);
                     PopulateCustomizationContent(CustomizationPart.Beard);
                     current = CustomizationPart.Beard;
                     break;
@@ -146,8 +155,8 @@ namespace Zomlypse.Behaviours
                 throw new ArgumentException($"{nameof(name)} cannot be empty or null");
             }
 
-            entity.Name = input.text;
-            GameManager.Instance.Player = entity;
+            info = new CharacterInfo(input.text, 27, gender);
+            GameManager.Instance.Player = new Entity(info, appearance);
             SceneLoader.LoadScene("Play_SampleScene");
         }
     }
