@@ -18,6 +18,21 @@ namespace Zomlypse.Extensions
             return ToHeader(type.ToString());
         }
 
+        public static int CountChar(this string str, char c)
+        {
+            int count = 0;
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] != c)
+                {
+                    continue;
+                }
+
+                count++;
+            }
+            return count;
+        }
+
         public static Direction DirectionTo(this Vector3 vector, Vector3 target)
         {
             Vector3 direction = (target - vector).normalized;
