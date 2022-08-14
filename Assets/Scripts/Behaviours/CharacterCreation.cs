@@ -155,7 +155,7 @@ namespace Zomlypse.Behaviours
                 throw new ArgumentException($"{nameof(name)} cannot be empty or null");
             }
 
-            info = new CharacterInfo(input.text, 27, gender);
+            info = new CharacterInfo(input.text, 27, gender, true);
             GameManager.Instance.Player = new Entity(info, appearance);
             SceneLoader.LoadScene("Play_SampleScene");
         }
