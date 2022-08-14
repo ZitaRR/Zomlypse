@@ -45,11 +45,15 @@ namespace Zomlypse.Extensions
                     ? Direction.Right
                     : Direction.Left;
             }
-            else
+            else if (x < y)
             {
                 return direction.y > 0
                     ? Direction.Up
                     : Direction.Down;
+            }
+            else
+            {
+                return Direction.Normal;
             }
         }
 
