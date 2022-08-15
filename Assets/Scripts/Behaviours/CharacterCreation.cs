@@ -135,11 +135,11 @@ namespace Zomlypse.Behaviours
             }
             else if (IsDetailedCustomizationActive)
             {
+                PopulateCustomizationContent(sprites);
                 UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
                 return;
             }
 
-            Debug.Log("!!");
             PopulateCustomizationContent(sprites);
             UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
         }
