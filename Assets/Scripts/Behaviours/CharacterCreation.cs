@@ -3,13 +3,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zomlypse.Enums;
+using Zomlypse.Extensions;
 
 namespace Zomlypse.Behaviours
 {
     public class CharacterCreation : MonoBehaviour
     {
+        public Appearance ActiveAppearance
+        {
+            get => maleToggle.isOn
+                ? maleAppearance
+                : femaleAppearance;
+        }
         public bool IsDetailedCustomizationActive
-            => current == CustomizationPart.Hair || current == CustomizationPart.Beard;
+            => current == CustomizationPart.Hair || (current == CustomizationPart.Beard && ActiveAppearance.Gender is Gender.Male);
 
         [SerializeField]
         private RectTransform customizationPanel;
@@ -23,62 +30,67 @@ namespace Zomlypse.Behaviours
         private RectTransform optionsPanel;
         [SerializeField]
         private Toggle maleToggle;
-        [SerializeField]
-        private Toggle femaleToggle;
 
-        private Appearance appearance;
+        private Appearance maleAppearance;
+        private Appearance femaleAppearance;
         private Card card;
         private CharacterInfo info;
         private CustomizationPart current;
-        private Gender gender;
 
         private void Awake()
         {
             card = GetComponentInChildren<Card>();
 
-            maleToggle.onValueChanged.AddListener((value) => gender = value ? Gender.Male : Gender.None);
-            femaleToggle.onValueChanged.AddListener((value) => gender = value ? Gender.Female : Gender.None);
+            maleToggle.onValueChanged.AddListener((value) =>
+            {
+                SetCustomizationOption(current);
+                card.Apply(ActiveAppearance);
+            });
         }
 
         private void Start()
         {
-            appearance = Appearance.Random();
-            appearance.OnChange += (appearance, _) => card.Apply(appearance);
-            card.Apply(appearance);
+            maleAppearance = Appearance.Random(Gender.Male);
+            femaleAppearance = Appearance.Random(Gender.Female);
+            maleAppearance.OnChange += (appearance, _) => card.Apply(appearance);
+            femaleAppearance.OnChange += (appearance, _) => card.Apply(appearance);
 
-            SetCustomizationOption(0);
+            card.Apply(ActiveAppearance);
+            SetCustomizationOption(CustomizationPart.Head);
         }
 
         public void SetCustomizationIndex(int index = 0)
         {
-            appearance.Load(current, index);
+            ActiveAppearance.Load(current, index);
         }
 
         public void SetCustomizationOption(int index)
         {
-            switch (index)
+            SetCustomizationOption((CustomizationPart)index);
+        }
+
+        public void SetCustomizationOption(CustomizationPart part)
+        {
+            switch (part)
             {
-                case 0:
-                    colorPicker.Attach(appearance.Head);
+                case CustomizationPart.Head:
+                    colorPicker.Attach(ActiveAppearance.Head);
                     PopulateCustomizationContent();
-                    current = CustomizationPart.Head;
                     break;
-                case 1:
-                    colorPicker.Attach(appearance.Hair);
-                    PopulateCustomizationContent(CustomizationPart.Hair);
-                    current = CustomizationPart.Hair;
+                case CustomizationPart.Hair:
+                    colorPicker.Attach(ActiveAppearance.Hair);
+                    PopulateCustomizationContent(part);
                     break;
-                case 2:
-                    colorPicker.Attach(appearance.Eyes);
+                case CustomizationPart.Eyes:
+                    colorPicker.Attach(ActiveAppearance.Eyes);
                     PopulateCustomizationContent();
-                    current = CustomizationPart.Eyes;
                     break;
-                case 3:
-                    colorPicker.Attach(appearance.Beard);
-                    PopulateCustomizationContent(CustomizationPart.Beard);
-                    current = CustomizationPart.Beard;
+                case CustomizationPart.Beard:
+                    colorPicker.Attach(ActiveAppearance.Beard);
+                    PopulateCustomizationContent(part);
                     break;
             }
+            current = part;
         }
 
         private void PopulateCustomizationContent(CustomizationPart part = CustomizationPart.None)
@@ -86,17 +98,20 @@ namespace Zomlypse.Behaviours
             Sprite[] sprites = new Sprite[0];
             switch (part)
             {
-                case CustomizationPart.Hair:
-                    sprites = Resources.LoadAll<Sprite>(Appearance.HAIRS);
+                case CustomizationPart.Hair when ActiveAppearance.Gender is Gender.Male:
+                    sprites = Resources.LoadAll<Sprite>(Appearance.MALE_HAIRS);
                     break;
-                case CustomizationPart.Beard:
+                case CustomizationPart.Hair when ActiveAppearance.Gender is Gender.Female:
+                    sprites = Resources.LoadAll<Sprite>(Appearance.FEMALE_HAIRS);
+                    break;
+                case CustomizationPart.Beard when ActiveAppearance.Gender is Gender.Male:
                     sprites = Resources.LoadAll<Sprite>(Appearance.BEARDS);
                     break;
             }
 
             if (sprites.Length <= 0)
             {
-                if (!IsDetailedCustomizationActive)
+                if (!IsDetailedCustomizationActive && current != CustomizationPart.Beard)
                 {
                     return;
                 }
@@ -105,17 +120,26 @@ namespace Zomlypse.Behaviours
                 return;
             }
 
-            if (!UI.IsTweening(customizationPanel, out LTDescr ltd) && IsDetailedCustomizationActive)
+            Direction direction = customizationPanel.localPosition.DirectionTo(optionsPanel.localPosition);
+            if (direction is Direction.Normal)
+            {
+                PopulateCustomizationContent(sprites);
+                UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
+                return;
+            }
+
+            if (!UI.IsTweening(customizationPanel, out _) && IsDetailedCustomizationActive)
             {
                 UI.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(sprites));
                 return;
             }
-            else if (ltd == null && IsDetailedCustomizationActive)
+            else if (IsDetailedCustomizationActive)
             {
                 UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
                 return;
             }
 
+            Debug.Log("!!");
             PopulateCustomizationContent(sprites);
             UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
         }
@@ -127,7 +151,7 @@ namespace Zomlypse.Behaviours
             {
                 GameObject card = CreateCustomizationCard(sprites[i]);
                 Button button = card.GetComponent<Button>();
-                int temp = i + 1;
+                int temp = i;
                 button.onClick.AddListener(() => SetCustomizationIndex(temp));
             }
         }
@@ -155,8 +179,8 @@ namespace Zomlypse.Behaviours
                 throw new ArgumentException($"{nameof(name)} cannot be empty or null");
             }
 
-            info = new CharacterInfo(input.text, 27, gender, true);
-            GameManager.Instance.Player = new Entity(info, appearance);
+            info = new CharacterInfo(input.text, 27, ActiveAppearance.Gender, true);
+            GameManager.Instance.Player = new Entity(info, ActiveAppearance);
             SceneLoader.LoadScene("Play_SampleScene");
         }
     }

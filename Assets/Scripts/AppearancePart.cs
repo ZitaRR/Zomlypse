@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using UnityEngine;
 using Zomlypse.Enums;
+using Zomlypse.Extensions;
 
 namespace Zomlypse
 {
@@ -35,6 +37,7 @@ namespace Zomlypse
             }
         }
         public CustomizationPart Part { get; private set; }
+        public int Index { get; private set; }
 
         public event Action<AppearancePart> OnChange;
 
@@ -53,19 +56,9 @@ namespace Zomlypse
             Part = part;
         }
 
-        public void Randomize()
+        public void Clear()
         {
-            switch (Part)
-            {
-                case CustomizationPart.Hair:
-                    Sprite = Resources.Load<Sprite>($"{Appearance.HAIRS}hair_{UnityEngine.Random.Range(1, Appearance.HairCount)}");
-                    break;
-                case CustomizationPart.Beard:
-                    Sprite = Resources.Load<Sprite>($"{Appearance.BEARDS}beard_{UnityEngine.Random.Range(1, Appearance.BeardCount)}");
-                    break;
-                default:
-                    throw new InvalidOperationException($"Custmization part must be of either {nameof(CustomizationPart.Hair)} or {nameof(CustomizationPart.Beard)}");
-            }
+            Sprite = Resources.Load<Sprite>(Appearance.EMPTY);
         }
     }
 }
