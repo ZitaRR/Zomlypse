@@ -9,6 +9,8 @@ namespace Zomlypse
 {
     public static class UI
     {
+        private const float DEFAULT_SPEED = .6f;
+
         private static Dictionary<int, LTDescr> tweeningElements = new Dictionary<int, LTDescr>();
         private static List<Component> elements = new List<Component>();
 
@@ -34,7 +36,7 @@ namespace Zomlypse
             return ltd;
         }
 
-        public static LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, float duration = 1f, Action action = null)
+        public static LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, float duration = DEFAULT_SPEED, Action action = null)
         {
             Vector3 position = parent.localPosition;
             switch (direction)
@@ -54,16 +56,16 @@ namespace Zomlypse
             }
 
             return Move(child, position, duration, action)
-                .setEase(LeanTweenType.easeInOutBack);
+                .setEase(LeanTweenType.easeInOutSine);
         }
 
         public static LTDescr SweepTransition(RectTransform child, RectTransform parent, Action action)
         {
             Direction current = parent.localPosition.DirectionTo(child.localPosition);
-            return Sweep(child, parent, Direction.Normal, .8f, () =>
+            return Sweep(child, parent, Direction.Normal, DEFAULT_SPEED, () =>
             {
                 action?.Invoke();
-                Sweep(child, parent, current, .8f);
+                Sweep(child, parent, current, DEFAULT_SPEED);
             });
         }
 
