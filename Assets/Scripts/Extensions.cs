@@ -36,10 +36,8 @@ namespace Zomlypse.Extensions
         public static Direction DirectionTo(this Vector3 vector, Vector3 target)
         {
             Vector3 direction = (target - vector).normalized;
-            Debug.Log($"({target.x}, {target.y}, {target.z}) - ({vector.x}, {vector.y}, {vector.z}) = ({direction.x}, {direction.y}, {direction.z})");
             float x = Mathf.Abs(direction.x);
             float y = Mathf.Abs(direction.y);
-            Debug.Log($"{x} :: {y}");
 
             if (x > y)
             {
