@@ -16,7 +16,7 @@ namespace Zomlypse.Behaviours
                 : femaleAppearance;
         }
         public bool IsDetailedCustomizationActive
-            => current == CustomizationPart.Hair || (current == CustomizationPart.Beard && ActiveAppearance.Gender is Gender.Male);
+            => previous == CustomizationPart.Hair || (previous == CustomizationPart.Beard && ActiveAppearance.Gender is Gender.Male);
 
         [SerializeField]
         private RectTransform customizationPanel;
@@ -36,12 +36,14 @@ namespace Zomlypse.Behaviours
         private Card card;
         private CharacterInfo info;
         private CustomizationPart current;
+        private CustomizationPart previous;
+        private Sprite[] sprites;
 
         private void Awake()
         {
             card = GetComponentInChildren<Card>();
 
-            maleToggle.onValueChanged.AddListener((value) =>
+            maleToggle.onValueChanged.AddListener((_) =>
             {
                 SetCustomizationOption(current);
                 card.Apply(ActiveAppearance);
@@ -52,8 +54,8 @@ namespace Zomlypse.Behaviours
         {
             maleAppearance = Appearance.Random(Gender.Male);
             femaleAppearance = Appearance.Random(Gender.Female);
-            maleAppearance.OnChange += (appearance, _) => card.Apply(appearance);
-            femaleAppearance.OnChange += (appearance, _) => card.Apply(appearance);
+            maleAppearance.OnChange += UpdateAppearance;
+            femaleAppearance.OnChange += UpdateAppearance;
 
             card.Apply(ActiveAppearance);
             SetCustomizationOption(CustomizationPart.Head);
@@ -71,7 +73,10 @@ namespace Zomlypse.Behaviours
 
         public void SetCustomizationOption(CustomizationPart part)
         {
-            switch (part)
+            previous = current;
+            current = part;
+
+            switch (current)
             {
                 case CustomizationPart.Head:
                     colorPicker.Attach(ActiveAppearance.Head);
@@ -79,7 +84,7 @@ namespace Zomlypse.Behaviours
                     break;
                 case CustomizationPart.Hair:
                     colorPicker.Attach(ActiveAppearance.Hair);
-                    PopulateCustomizationContent(part);
+                    PopulateCustomizationContent();
                     break;
                 case CustomizationPart.Eyes:
                     colorPicker.Attach(ActiveAppearance.Eyes);
@@ -87,16 +92,15 @@ namespace Zomlypse.Behaviours
                     break;
                 case CustomizationPart.Beard:
                     colorPicker.Attach(ActiveAppearance.Beard);
-                    PopulateCustomizationContent(part);
+                    PopulateCustomizationContent();
                     break;
             }
-            current = part;
         }
 
-        private void PopulateCustomizationContent(CustomizationPart part = CustomizationPart.None)
+        private void PopulateCustomizationContent()
         {
-            Sprite[] sprites = new Sprite[0];
-            switch (part)
+            sprites = new Sprite[0];
+            switch (current)
             {
                 case CustomizationPart.Hair when ActiveAppearance.Gender is Gender.Male:
                     sprites = Resources.LoadAll<Sprite>(Appearance.MALE_HAIRS);
@@ -161,6 +165,16 @@ namespace Zomlypse.Behaviours
             GameObject card = Instantiate(customizationCard, customizationContent.transform);
             Image image = card.transform.GetChild(0).GetComponent<Image>();
             image.sprite = sprite;
+
+            if (current is CustomizationPart.Hair)
+            {
+                image.color = ActiveAppearance.Hair.Color;
+            }
+            else if (current is CustomizationPart.Beard)
+            {
+                image.color = ActiveAppearance.Beard.Color;
+            }
+
             return card;
         }
 
@@ -182,6 +196,16 @@ namespace Zomlypse.Behaviours
             info = new CharacterInfo(input.text, 27, ActiveAppearance.Gender, true);
             GameManager.Instance.Player = new Entity(info, ActiveAppearance);
             SceneLoader.LoadScene("Play_SampleScene");
+        }
+
+        private void UpdateAppearance(Appearance appearance, AppearancePart part)
+        {
+            if (sprites.Length > 0)
+            {
+                PopulateCustomizationContent(sprites);
+            }
+
+            card.Apply(appearance);
         }
     }
 }
