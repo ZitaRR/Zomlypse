@@ -19,7 +19,6 @@ namespace Zomlypse.Behaviours
         private RectTransform view;
         private List<RectTransform> notifications = new List<RectTransform>();
         private Vector2 startPosition;
-        private float offsetHeight;
         private float time;
 
         private void Awake()
@@ -43,7 +42,6 @@ namespace Zomlypse.Behaviours
             time += Time.deltaTime;
             if (time >= lifeTime)
             {
-                time = 0f;
                 DeleteNotification();
             }
         }
@@ -57,10 +55,9 @@ namespace Zomlypse.Behaviours
 
             yield return new WaitForEndOfFrame();
 
-            float startY = view.rect.yMin + rect.rect.height / 2;
-            rect.anchoredPosition = new Vector2(Screen.safeArea.xMin - view.rect.width, startY + offsetHeight);
+            float startY = view.rect.yMin + rect.rect.height / 2 + rect.rect.height * (notifications.Count - 1) + (spacing * notifications.Count - 1);
+            rect.anchoredPosition = new Vector2(Screen.safeArea.xMin - view.rect.width, startY);
 
-            offsetHeight += rect.rect.height + spacing;
             UI.Move(rect, new Vector3(rect.anchoredPosition.x + view.rect.width, rect.anchoredPosition.y), speed);
         }
 
@@ -70,33 +67,33 @@ namespace Zomlypse.Behaviours
             {
                 return;
             }
+            if (index == 0)
+            {
+                time = 0f;
+            }
 
             RectTransform rect = notifications[index];
             notifications.RemoveAt(index);
             Destroy(rect.gameObject);
 
-            offsetHeight -= rect.rect.height + spacing;
-            AdjustNotifications(rect.rect.height, index);
+            AdjustNotifications(index);
         }
 
-        private void AdjustNotifications(float previousHeight, int index)
+        private void AdjustNotifications(int index)
         {
             if (notifications.Count <= 0)
             {
                 return;
             }
 
+            Vector2 target = new Vector2(startPosition.x + view.rect.width, view.rect.yMin);
             for (int i = index; i < notifications.Count; i++)
             {
                 RectTransform rect = notifications[i];
-                Vector2 target = new Vector2(rect.anchoredPosition.x, rect.anchoredPosition.y - previousHeight - spacing);
+                target.x = rect.anchoredPosition.x;
+                target.y = view.rect.yMin + rect.rect.height / 2 + rect.rect.height * i + (spacing * i);
 
-                if (i == 0)
-                {
-                    UI.Move(rect, target, speed);
-                    continue;
-                }
-                else if (UI.IsTweening(rect, out _))
+                if (UI.IsTweening(rect, out LTDescr ltd))
                 {
                     UI.Move(rect, new Vector3(view.anchoredPosition.x - rect.rect.width / 2, target.y), speed);
                     continue;
