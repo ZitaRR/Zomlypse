@@ -104,23 +104,6 @@ namespace Zomlypse.Behaviours
 
                 UI.Move(rect, target, speed);
             }
-
-            /*foreach (RectTransform rect in notifications)
-            {
-                Vector2 target = new Vector2(rect.anchoredPosition.x,  rect.anchoredPosition.y - previousHeight - spacing);
-                if (++index == 1)
-                {
-                    UI.Move(rect, target, speed, () => DeleteNotification());
-                    continue;
-                }
-                else if (UI.IsTweening(rect, out _))
-                {
-                    UI.Move(rect, new Vector3(view.anchoredPosition.x - rect.rect.width / 2, target.y), speed);
-                    continue;
-                }
-
-                UI.Move(rect, target, speed);
-            }*/
         }
 
         public void Add(string header, string description)
