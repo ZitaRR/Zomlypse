@@ -19,6 +19,7 @@ namespace Zomlypse.Behaviours
         private RectTransform view;
         private List<RectTransform> notifications = new List<RectTransform>();
         private Vector2 startPosition;
+        private float offsetHeight;
         private float time;
 
         private void Awake()
@@ -55,9 +56,10 @@ namespace Zomlypse.Behaviours
 
             yield return new WaitForEndOfFrame();
 
-            float startY = view.rect.yMin + rect.rect.height / 2 + rect.rect.height * (notifications.Count - 1) + (spacing * notifications.Count - 1);
-            rect.anchoredPosition = new Vector2(Screen.safeArea.xMin - view.rect.width, startY);
+            float startY = view.rect.yMin + rect.rect.height / 2;
+            rect.anchoredPosition = new Vector2(Screen.safeArea.xMin - view.rect.width, startY + offsetHeight);
 
+            offsetHeight += rect.rect.height + spacing;
             UI.Move(rect, new Vector3(rect.anchoredPosition.x + view.rect.width, rect.anchoredPosition.y), speed);
         }
 
@@ -76,10 +78,11 @@ namespace Zomlypse.Behaviours
             notifications.RemoveAt(index);
             Destroy(rect.gameObject);
 
-            AdjustNotifications(index);
+            offsetHeight -= rect.rect.height + spacing;
+            AdjustNotifications();
         }
 
-        private void AdjustNotifications(int index)
+        private void AdjustNotifications()
         {
             if (notifications.Count <= 0)
             {
@@ -87,19 +90,19 @@ namespace Zomlypse.Behaviours
             }
 
             Vector2 target = new Vector2(startPosition.x + view.rect.width, view.rect.yMin);
-            for (int i = index; i < notifications.Count; i++)
+            for (int i = 0; i < notifications.Count; i++)
             {
                 RectTransform rect = notifications[i];
                 target.x = rect.anchoredPosition.x;
-                target.y = view.rect.yMin + rect.rect.height / 2 + rect.rect.height * i + (spacing * i);
+                target.y += rect.rect.height / 2;
 
-                if (UI.IsTweening(rect, out LTDescr ltd))
+                if (UI.IsTweening(rect, out _))
                 {
-                    UI.Move(rect, new Vector3(view.anchoredPosition.x - rect.rect.width / 2, target.y), speed);
-                    continue;
+                    target = new Vector2(view.anchoredPosition.x - rect.rect.width / 2, target.y);
                 }
 
                 UI.Move(rect, target, speed);
+                target.y += rect.rect.yMax + spacing;
             }
         }
 
