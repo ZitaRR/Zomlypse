@@ -747,6 +747,7 @@ MonoBehaviour:
     type: 3}
   lifeTime: 4
   spacing: 2
+  speed: 0.4
 --- !u!114 &441517355
 MonoBehaviour:
   m_ObjectHideFlags: 0
