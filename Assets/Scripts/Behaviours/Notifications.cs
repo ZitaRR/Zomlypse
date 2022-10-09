@@ -84,7 +84,7 @@ namespace Zomlypse.Behaviours
                 speed);
         }
 
-        private INotification Delete(int index)
+        private INotification PopAt(int index)
         {
             if (notifications.Count == 0)
             {
@@ -93,7 +93,6 @@ namespace Zomlypse.Behaviours
 
             INotification notification = notifications[index];
             notifications.RemoveAt(index);
-            Destroy(notification.Rect.gameObject);
             offsetHeight -= notification.Rect.rect.height + spacing;
             AdjustNotifications();
 
@@ -102,18 +101,23 @@ namespace Zomlypse.Behaviours
 
         public void DeleteNotification(int index = 0)
         {
-            Delete(index);
+            INotification notification = PopAt(index);
+            if (notification is null)
+            {
+                return;
+            }
+            notification.Delete();
         }
 
         public void DeletePrompt(int index = 0, bool success = false)
         {
-            if (!(Delete(index) is IPrompt prompt))
+            if (!(PopAt(index) is Prompt prompt))
             {
                 return;
             }
 
             prompt.Success = success;
-            prompt.OnInput?.Invoke(prompt);
+            prompt.Delete();
         }
 
         private void AdjustNotifications()

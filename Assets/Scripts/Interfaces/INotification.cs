@@ -11,5 +11,6 @@ namespace Zomlypse.Interfaces
 
         void Update(float deltaTime);
         bool HasExpired();
+        void Delete();
     }
 }

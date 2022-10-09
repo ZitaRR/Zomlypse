@@ -30,5 +30,11 @@ namespace Zomlypse
         {
             return Time >= GameManager.Instance.Notifications.PromptLifeTime;
         }
+
+        public void Delete()
+        {
+            UnityEngine.Object.Destroy(Rect.gameObject);
+            OnInput?.Invoke(this);
+        }
     }
 }

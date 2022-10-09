@@ -26,5 +26,10 @@ namespace Zomlypse
         {
             return Time >= GameManager.Instance.Notifications.NotificationLifeTime;
         }
+
+        public void Delete()
+        {
+            Object.Destroy(Rect.gameObject);
+        }
     }
 }
