@@ -74,7 +74,9 @@ namespace Zomlypse.Behaviours
 
             if (Current.Year > previous.Year)
             {
-                GameManager.Instance.Notifications.Add($"Year {Current.Year}", $"Time has advanced, it is now year {Current.Year}.");
+                GameManager.Instance.Notifications.Add(new Notification(
+                    $"Year {Current.Year}",
+                    $"Time has advanced, it is now year {Current.Year}."));
             }
         }
 

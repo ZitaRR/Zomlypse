@@ -24,6 +24,27 @@ namespace Zomlypse.States
             {
                 game.TogglePlayPause();
             }
-        }
+            else if (Input.GetKeyDown(KeyCode.N))
+            {
+                manager.Notifications.Add(new Notification(
+                    "Notification",
+                    "This is a notification!"));
+            }
+            else if (Input.GetKeyDown(KeyCode.P))
+            {
+                manager.Notifications.Add(new Prompt(
+                    "Prompt",
+                    "This is a prompt!",
+                    (prompt) =>
+                    {
+                        string outcome = prompt.Success
+                            ? "Prompt was accepted!"
+                            : "Prompt was declined!";
+                        manager.Notifications.Add(new Notification(
+                            "Notification",
+                            outcome));
+                    }));
+            }
+        } 
     }
 }
