@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zomlypse.Enums;
 using Zomlypse.Extensions;
+using Zomlypse.Singletons;
 
 namespace Zomlypse.Behaviours
 {

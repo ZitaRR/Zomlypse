@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Zomlypse.Enums;
 using Zomlypse.Extensions;
+using Zomlypse.Singletons;
 
 namespace Zomlypse.Behaviours
 {
@@ -77,6 +78,24 @@ namespace Zomlypse.Behaviours
                 GameManager.Instance.Notifications.Add(new Notification(
                     $"Year {Current.Year}",
                     $"Time has advanced, it is now year {Current.Year}."));
+            }
+            else if (Current.Day > previous.Day)
+            {
+                GameManager.Instance.Notifications.Add(new Prompt(
+                    Current.DayOfWeek.ToString(),
+                    "One person wants to join your group!",
+                    (prompt) =>
+                    {
+                        if (!prompt.Success)
+                        {
+                            return;
+                        }
+                        Entity entity = new Entity();
+                        GameManager.Instance.Deck.Add(entity);
+                        GameManager.Instance.Notifications.Add(new Notification(
+                            "A New Face",
+                            $"<color=green><link=name>{entity.Info.Fullname}</link></color> have joined your group!"));
+                    }));
             }
         }
 

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Zomlypse.Enums;
 using Zomlypse.IO;
 using Zomlypse.States;
+using Zomlypse.Behaviours;
 
-namespace Zomlypse.Behaviours
+namespace Zomlypse.Singletons
 {
     public class GameManager : MonoBehaviour
     {
