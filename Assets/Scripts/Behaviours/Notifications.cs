@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zomlypse.Interfaces;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Behaviours
 {
@@ -37,6 +36,7 @@ namespace Zomlypse.Behaviours
         [SerializeField]
         private float speed;
 
+        private UI ui;
         private RectTransform view;
         private List<INotification> notifications = new List<INotification>();
         private Vector2 startPosition;
@@ -44,6 +44,7 @@ namespace Zomlypse.Behaviours
 
         private void Awake()
         {
+            ui = GameManager.Instance.UserInterface;
             view = GetComponent<RectTransform>();
         }
 
@@ -79,7 +80,7 @@ namespace Zomlypse.Behaviours
             notification.Rect.anchoredPosition = new Vector2(Screen.safeArea.xMin - view.rect.width, startY + offsetHeight);
 
             offsetHeight += notification.Rect.rect.height + spacing;
-            UI.Move(notification.Rect, new Vector3(
+            ui.Move(notification.Rect, new Vector3(
                 notification.Rect.anchoredPosition.x + view.rect.width,
                 notification.Rect.anchoredPosition.y),
                 speed);
@@ -135,12 +136,12 @@ namespace Zomlypse.Behaviours
                 target.x = rect.anchoredPosition.x;
                 target.y += rect.rect.height / 2;
 
-                if (UI.IsTweening(rect, out _))
+                if (ui.IsTweening(rect, out _))
                 {
                     target = new Vector2(view.anchoredPosition.x - rect.rect.width / 2, target.y);
                 }
 
-                UI.Move(rect, target, speed);
+                ui.Move(rect, target, speed);
                 target.y += rect.rect.yMax + spacing;
             }
         }

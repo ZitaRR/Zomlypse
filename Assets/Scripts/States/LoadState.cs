@@ -8,7 +8,7 @@ namespace Zomlypse.States
         public override void Start()
         {
             base.Start();
-            UI.DisableAll();
+            ui.DisableAll();
         }
 
         protected override void Update()

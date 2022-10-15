@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zomlypse.Enums;
 using Zomlypse.Extensions;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Behaviours
 {
@@ -31,6 +32,7 @@ namespace Zomlypse.Behaviours
         [SerializeField]
         private Toggle maleToggle;
 
+        private UI ui;
         private Appearance maleAppearance;
         private Appearance femaleAppearance;
         private Card card;
@@ -41,6 +43,7 @@ namespace Zomlypse.Behaviours
 
         private void Awake()
         {
+            ui = GameManager.Instance.UserInterface;
             card = GetComponentInChildren<Card>();
 
             maleToggle.onValueChanged.AddListener((_) =>
@@ -120,7 +123,7 @@ namespace Zomlypse.Behaviours
                     return;
                 }
 
-                UI.Sweep(customizationPanel, optionsPanel, Direction.Normal, action: ClearCustomizationContent);
+                ui.Sweep(customizationPanel, optionsPanel, Direction.Normal, action: ClearCustomizationContent);
                 return;
             }
 
@@ -128,24 +131,24 @@ namespace Zomlypse.Behaviours
             if (direction is Direction.Normal)
             {
                 PopulateCustomizationContent(sprites);
-                UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
+                ui.Sweep(customizationPanel, optionsPanel, Direction.Right);
                 return;
             }
 
-            if (!UI.IsTweening(customizationPanel, out _) && IsDetailedCustomizationActive)
+            if (!ui.IsTweening(customizationPanel, out _) && IsDetailedCustomizationActive)
             {
-                UI.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(sprites));
+                ui.SweepTransition(customizationPanel, optionsPanel, () => PopulateCustomizationContent(sprites));
                 return;
             }
             else if (IsDetailedCustomizationActive)
             {
                 PopulateCustomizationContent(sprites);
-                UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
+                ui.Sweep(customizationPanel, optionsPanel, Direction.Right);
                 return;
             }
 
             PopulateCustomizationContent(sprites);
-            UI.Sweep(customizationPanel, optionsPanel, Direction.Right);
+            ui.Sweep(customizationPanel, optionsPanel, Direction.Right);
         }
 
         private void PopulateCustomizationContent(Sprite[] sprites)

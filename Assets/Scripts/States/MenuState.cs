@@ -5,13 +5,13 @@
         public override void Start()
         {
             base.Start();
-            UI.Enable("CharacterCreation");
+            ui.Enable("CharacterCreation");
         }
 
         public override void Stop()
         {
             base.Stop();
-            UI.Disable("CharacterCreation");
+            ui.Disable("CharacterCreation");
         }
 
         protected override void Update()

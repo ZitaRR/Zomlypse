@@ -1,5 +1,6 @@
 ﻿using System;
 using Zomlypse.Behaviours;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.States
 {
@@ -11,6 +12,7 @@ namespace Zomlypse.States
 
         protected GameManager manager;
         protected Game game;
+        protected UI ui;
 
         public State()
         {
@@ -19,6 +21,7 @@ namespace Zomlypse.States
 
             manager = GameManager.Instance;
             game = manager.GetComponent<Game>();
+            ui = manager.UserInterface;
         }
 
         public virtual void Start()

@@ -26,6 +26,7 @@ namespace Zomlypse
         public int Age { get; private set; }
         public Gender Gender { get; set; }
         public bool IsPlayer { get; }
+        public Guid Id { get; }
 
         public CharacterInfo(string name, int age, Gender gender, bool isPlayer = false)
         {
@@ -54,6 +55,7 @@ namespace Zomlypse
             
             Age = age;
             Gender = gender;
+            Id = Guid.NewGuid();
         }
 
         public static CharacterInfo Empty()

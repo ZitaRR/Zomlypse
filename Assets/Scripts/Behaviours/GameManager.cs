@@ -3,7 +3,7 @@ using UnityEngine;
 using Zomlypse.Enums;
 using Zomlypse.IO;
 using Zomlypse.States;
-using Zomlypse.Behaviours;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Behaviours
 {
@@ -16,11 +16,20 @@ namespace Zomlypse.Behaviours
         public Entity Player { get; set; }
         public Notifications Notifications { get => notifications; }
         public CardDeck Deck { get => deck; }
+        public UI UserInterface { get => userInterface; }
+        public TextLinker Linker { get => linker; }
+        public EntityManager Entities { get => entities; }
 
         [SerializeField]
         private Notifications notifications;
         [SerializeField]
         private CardDeck deck;
+        [SerializeField]
+        private UI userInterface;
+        [SerializeField]
+        private TextLinker linker;
+        [SerializeField]
+        private EntityManager entities;
 
         private void Awake()
         {
@@ -34,17 +43,8 @@ namespace Zomlypse.Behaviours
             DontDestroyOnLoad(Instance);
 
             FileManager.Initialize();
-
-            Transform ui = GameObject.FindGameObjectWithTag("UI").transform;
-            Component[] components = new Component[ui.childCount];
-
-            for (int i = 0; i < components.Length; i++)
-            {
-                components[i] = ui.GetChild(i);
-            }
-
-
-            UI.Initialize(components);
+            UserInterface.Initialize(this);
+            Entities.Initialize(this);
         }
 
         private void Start()

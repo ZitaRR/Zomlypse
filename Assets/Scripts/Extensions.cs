@@ -84,5 +84,10 @@ namespace Zomlypse.Extensions
                     throw new InvalidOperationException($"{nameof(gender)} must be of either {Gender.Male} or {Gender.Female}");
             }
         }
+
+        public static string Format(this TextColor color)
+        {
+            return color.ToString().ToLower();
+        }
     }
 }

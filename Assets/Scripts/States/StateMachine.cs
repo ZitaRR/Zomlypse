@@ -2,7 +2,7 @@
 
 namespace Zomlypse.States
 {
-    public static class StateMachine
+    public class StateMachine
     {
         public static State State { get; private set; }
 

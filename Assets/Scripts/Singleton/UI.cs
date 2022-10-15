@@ -1,25 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using Zomlypse.Behaviours;
 using Zomlypse.Enums;
 using Zomlypse.Extensions;
 
-namespace Zomlypse
+namespace Zomlypse.Singleton
 {
-    public static class UI
+    [Serializable]
+    public class UI : Singleton
     {
-        private const float DEFAULT_SPEED = .6f;
+        [SerializeField]
+        private float speed;
+        [SerializeField]
+        private Transform root;
 
-        private static Dictionary<int, LTDescr> tweeningElements = new Dictionary<int, LTDescr>();
-        private static List<Component> elements = new List<Component>();
+        private Dictionary<int, LTDescr> tweeningElements = new Dictionary<int, LTDescr>();
+        private Component[] elements;
 
-        public static void Initialize(params Component[] components)
+        public override void Initialize(GameManager _)
         {
-            elements.AddRange(components);
+            elements = new Component[root.childCount];
+            for (int i = 0; i < elements.Length; i++)
+            {
+                elements[i] = root.GetChild(i);
+            }
         }
 
-        public static LTDescr Move(RectTransform rect, Vector3 position, float duration = 1f, Action action = null)
+        public LTDescr Move(RectTransform rect, Vector3 position, float duration, Action action = null)
         {
             if (IsTweening(rect, out LTDescr ltd))
             {
@@ -36,7 +44,12 @@ namespace Zomlypse
             return ltd;
         }
 
-        public static LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, float duration = DEFAULT_SPEED, Action action = null)
+        public LTDescr Move(RectTransform rect, Vector3 position, Action action = null)
+        {
+            return Move(rect, position, speed, action);
+        }
+
+        public LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, float duration, Action action = null)
         {
             Vector3 position = parent.localPosition;
             switch (direction)
@@ -59,17 +72,22 @@ namespace Zomlypse
                 .setEase(LeanTweenType.easeInOutSine);
         }
 
-        public static LTDescr SweepTransition(RectTransform child, RectTransform parent, Action action)
+        public LTDescr Sweep(RectTransform child, RectTransform parent, Direction direction, Action action = null)
+        {
+            return Sweep(child, parent, direction, speed, action);
+        }
+
+        public LTDescr SweepTransition(RectTransform child, RectTransform parent, Action action)
         {
             Direction current = parent.localPosition.DirectionTo(child.localPosition);
-            return Sweep(child, parent, Direction.Normal, DEFAULT_SPEED, () =>
+            return Sweep(child, parent, Direction.Normal, speed, () =>
             {
                 action?.Invoke();
-                Sweep(child, parent, current, DEFAULT_SPEED);
+                Sweep(child, parent, current, speed);
             });
         }
 
-        private static void AddTween(LTDescr ltd)
+        private void AddTween(LTDescr ltd)
         {
             if (IsTweening(ltd.rectTransform, out _))
             {
@@ -79,7 +97,7 @@ namespace Zomlypse
             tweeningElements.Add(ltd.rectTransform.GetInstanceID(), ltd);
         }
 
-        private static bool RemoveTween(LTDescr ltd)
+        private bool RemoveTween(LTDescr ltd)
         {
             if (!tweeningElements.Remove(ltd.rectTransform.GetInstanceID()))
             {
@@ -90,22 +108,22 @@ namespace Zomlypse
             return true;
         }
 
-        public static bool IsTweening(RectTransform rect, out LTDescr ltd)
+        public bool IsTweening(RectTransform rect, out LTDescr ltd)
         {
             return tweeningElements.TryGetValue(rect.GetInstanceID(), out ltd);
         }
 
-        public static void Enable(string name)
+        public void Enable(string name)
         {
             SetElement(name, true);
         }
 
-        public static void Disable(string name)
+        public void Disable(string name)
         {
             SetElement(name, false);
         }
 
-        public static void DisableAll()
+        public void DisableAll()
         {
             foreach (Component element in elements)
             {
@@ -113,7 +131,7 @@ namespace Zomlypse
             }
         }
 
-        private static void SetElement(string name, bool value)
+        private void SetElement(string name, bool value)
         {
             foreach (Component element in elements)
             {

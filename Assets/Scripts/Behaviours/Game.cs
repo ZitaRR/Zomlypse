@@ -89,11 +89,10 @@ namespace Zomlypse.Behaviours
                         {
                             return;
                         }
-                        Entity entity = new Entity();
-                        GameManager.Instance.Deck.Add(entity);
+                        Entity entity = GameManager.Instance.Entities.AddEntityToPlayer();
                         GameManager.Instance.Notifications.Add(new Notification(
                             "A New Face",
-                            $"<color=green><link=name>{entity.Info.Fullname}</link></color> have joined your group!"));
+                            $"{GameManager.Instance.Linker.CharacterLink(entity)} have joined your group!"));
                     }));
             }
         }
