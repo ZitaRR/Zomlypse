@@ -1,6 +1,5 @@
 ﻿using System;
 using Zomlypse.Behaviours;
-using Zomlypse.Singletons;
 
 namespace Zomlypse.States
 {

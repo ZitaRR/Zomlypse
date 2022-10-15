@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using TMPro;
 using Zomlypse.Enums;
 using Zomlypse.Extensions;
-using Zomlypse.Singletons;
 
 namespace Zomlypse.Behaviours
 {

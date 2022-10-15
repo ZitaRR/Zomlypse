@@ -5,7 +5,7 @@ using Zomlypse.IO;
 using Zomlypse.States;
 using Zomlypse.Behaviours;
 
-namespace Zomlypse.Singletons
+namespace Zomlypse.Behaviours
 {
     public class GameManager : MonoBehaviour
     {

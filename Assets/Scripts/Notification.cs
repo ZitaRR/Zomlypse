@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using Zomlypse.Interfaces;
-using Zomlypse.Singletons;
+using Zomlypse.Behaviours;
 
 namespace Zomlypse
 {

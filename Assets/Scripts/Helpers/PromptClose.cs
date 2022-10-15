@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using Zomlypse.Singletons;
+using Zomlypse.Behaviours;
 
 namespace Zomlypse.Helpers
 {
