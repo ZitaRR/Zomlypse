@@ -2,28 +2,31 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zomlypse.Behaviours;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Helpers
 {
     public class NotificationClose : MonoBehaviour, IPointerClickHandler
     {
         private TextMeshProUGUI text;
+        private TextLinker linker;
+        private Notifications notifications;
 
         private void Start()
         {
             text = GetComponentInChildren<TextMeshProUGUI>();
+            linker = GameManager.Instance.Linker;
+            notifications = GameManager.Instance.Notifications;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            int index = TMP_TextUtilities.FindIntersectingLink(text, Input.mousePosition, null);
-            if (index > -1)
+            Entity entity = linker.GetLinkCharacter(text);
+            if (entity != null)
             {
-                TMP_LinkInfo info = text.textInfo.linkInfo[index];
-                string content = info.GetLinkText();
-                GameManager.Instance.Notifications.Add(new Notification(
+                notifications.Add(new Notification(
                     "Survivor",
-                    $"This is <color=red>{content}</color>"));
+                    $"You pressed on {linker.CharacterLink(entity.Info)}!"));
                 return;
             }
 

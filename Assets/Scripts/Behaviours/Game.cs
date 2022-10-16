@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Zomlypse.Enums;
 using Zomlypse.Extensions;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Behaviours
 {
@@ -48,12 +49,19 @@ namespace Zomlypse.Behaviours
         private IFormatProvider format;
         private GamePace pace;
         private GamePace previous;
+        private Notifications notifications;
+        private TextLinker linker;
+        private EntityManager entities;
 
         private void Awake()
         {
             pauseButton.onClick.AddListener(Pause);
             normalButton.onClick.AddListener(() => Play());
             fastButton.onClick.AddListener(() => Play(GamePace.Fast));
+
+            notifications = GameManager.Instance.Notifications;
+            linker = GameManager.Instance.Linker;
+            entities = GameManager.Instance.Entities;
         }
 
         private void Start()
@@ -74,13 +82,13 @@ namespace Zomlypse.Behaviours
 
             if (Current.Year > previous.Year)
             {
-                GameManager.Instance.Notifications.Add(new Notification(
+                notifications.Add(new Notification(
                     $"Year {Current.Year}",
                     $"Time has advanced, it is now year {Current.Year}."));
             }
             else if (Current.Day > previous.Day)
             {
-                GameManager.Instance.Notifications.Add(new Prompt(
+                notifications.Add(new Prompt(
                     Current.DayOfWeek.ToString(),
                     "One person wants to join your group!",
                     (prompt) =>
@@ -89,10 +97,10 @@ namespace Zomlypse.Behaviours
                         {
                             return;
                         }
-                        Entity entity = GameManager.Instance.Entities.AddEntityToPlayer();
-                        GameManager.Instance.Notifications.Add(new Notification(
+                        Entity entity = entities.AddEntityToPlayer();
+                        notifications.Add(new Notification(
                             "A New Face",
-                            $"{GameManager.Instance.Linker.CharacterLink(entity)} have joined your group!"));
+                            $"{linker.CharacterLink(entity)} have joined your group!"));
                     }));
             }
         }

@@ -13,9 +13,11 @@ namespace Zomlypse.Singleton
         [SerializeField]
         private TextColor characterColor;
 
-        public override void Initialize(GameManager _)
-        {
+        private EntityManager entities;
 
+        public override void Initialize(GameManager manager)
+        {
+            entities = manager.Entities;
         }
 
         public string CharacterLink(CharacterInfo info)
@@ -30,15 +32,21 @@ namespace Zomlypse.Singleton
 
         public Entity GetLinkCharacter(TextMeshProUGUI text)
         {
-            return null;
+            TMP_LinkInfo info = GetLink(text);
+            if (info.Equals(default(TMP_LinkInfo)))
+            {
+                return null;
+            }
+
+            return entities.GetEntity(Guid.Parse(info.GetLinkID()));
         }
 
-        private TMP_LinkInfo? GetLink(TextMeshProUGUI text)
+        private TMP_LinkInfo GetLink(TextMeshProUGUI text)
         {
             int index = TMP_TextUtilities.FindIntersectingLink(text, Input.mousePosition, null);
             if (index == -1)
             {
-                return null;
+                return default;
             }
 
             return text.textInfo.linkInfo[index];

@@ -45,6 +45,7 @@ namespace Zomlypse.Behaviours
             FileManager.Initialize();
             UserInterface.Initialize(this);
             Entities.Initialize(this);
+            Linker.Initialize(this);
         }
 
         private void Start()
