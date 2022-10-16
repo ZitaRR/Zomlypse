@@ -22,7 +22,7 @@ namespace Zomlypse.Singleton
 
         public string CharacterLink(CharacterInfo info)
         {
-            return $"<color={characterColor.Format()}><link={info.Id}>{info.Fullname}</link></color>";
+            return $"<color=\"{characterColor.Format()}\"><link=\"{info.Id}\">{info.Fullname}</link></color>";
         }
 
         public string CharacterLink(Entity entity)

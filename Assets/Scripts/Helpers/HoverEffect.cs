@@ -22,8 +22,12 @@ namespace Zomlypse.Helpers
 
         private void Awake()
         {
-            ui = GameManager.Instance.UserInterface;
             rect = GetComponent<RectTransform>();
+        }
+
+        private void Start()
+        {
+            ui = GameManager.Instance.UserInterface;
         }
 
         public void OnPointerEnter(PointerEventData eventData)

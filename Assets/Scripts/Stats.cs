@@ -45,5 +45,11 @@ namespace Zomlypse
             get => stats[index];
             set => stats[index] = value;
         }
+
+        public Stat this[StatType type]
+        {
+            get => stats[(int)type];
+            set => stats[(int)type] = value;
+        }
     }
 }

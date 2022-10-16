@@ -19,6 +19,7 @@ namespace Zomlypse.Behaviours
         public bool IsDetailedCustomizationActive
             => previous == CustomizationPart.Hair || (previous == CustomizationPart.Beard && ActiveAppearance.Gender is Gender.Male);
 
+        [Header("Character Creation")]
         [SerializeField]
         private RectTransform customizationPanel;
         [SerializeField]
@@ -32,6 +33,18 @@ namespace Zomlypse.Behaviours
         [SerializeField]
         private Toggle maleToggle;
 
+        [Header("Stats")]
+        [SerializeField]
+        private TextMeshProUGUI header;
+        [SerializeField]
+        private TextMeshProUGUI fitness;
+        [SerializeField]
+        private TextMeshProUGUI nimble;
+        [SerializeField]
+        private TextMeshProUGUI technical;
+        [SerializeField]
+        private TextMeshProUGUI medical;
+
         private UI ui;
         private Appearance maleAppearance;
         private Appearance femaleAppearance;
@@ -40,22 +53,23 @@ namespace Zomlypse.Behaviours
         private CustomizationPart current;
         private CustomizationPart previous;
         private Sprite[] sprites;
-        private Stats stats;
+        private Stats stats = new Stats();
+        private int points = Stats.INITIAL;
 
         private void Awake()
         {
-            ui = GameManager.Instance.UserInterface;
             card = GetComponentInChildren<Card>();
+        }
 
+        private void Start()
+        {
+            ui = GameManager.Instance.UserInterface;
             maleToggle.onValueChanged.AddListener((_) =>
             {
                 SetCustomizationOption(current);
                 card.Apply(ActiveAppearance);
             });
-        }
 
-        private void Start()
-        {
             maleAppearance = Appearance.Random(Gender.Male);
             femaleAppearance = Appearance.Random(Gender.Female);
             maleAppearance.OnChange += UpdateAppearance;
@@ -63,6 +77,11 @@ namespace Zomlypse.Behaviours
 
             card.Apply(ActiveAppearance);
             SetCustomizationOption(CustomizationPart.Head);
+
+            for (int i = 0; i < stats.Length; i++)
+            {
+                UpdateStatsUI(stats[i]);
+            }
         }
 
         public void SetCustomizationIndex(int index = 0)
@@ -210,6 +229,77 @@ namespace Zomlypse.Behaviours
             }
 
             card.Apply(appearance);
+        }
+
+        public void GoToCharacter()
+        {
+            ui.Disable("StatPicker");
+            ui.Enable("CharacterCreation");
+        }
+
+        public void GoToStats()
+        {
+            ui.Disable("CharacterCreation");
+            ui.Enable("StatPicker");
+        }
+
+        public void IncreaseStat(int value)
+        {
+            IncreaseStat((StatType)value);
+        }
+
+        public void IncreaseStat(StatType type)
+        {
+            if (points == 0)
+            {
+                return;
+            }
+
+            Stat stat = stats[type];
+            if (!stat.TryIncrease(1))
+            {
+                return;
+            }
+
+            points--;
+            UpdateStatsUI(stat);
+        }
+
+        public void DecreaseStat(int value)
+        {
+            DecreaseStat((StatType)value);
+        }
+
+        public void DecreaseStat(StatType type)
+        {
+            Stat stat = stats[type];
+            if (!stat.TryDecrease(1))
+            {
+                return;
+            }
+
+            points++;
+            UpdateStatsUI(stat);
+        }
+
+        private void UpdateStatsUI(Stat stat)
+        {
+            header.text = points.ToString();
+            switch (stat.Type)
+            {
+                case StatType.Fitness:
+                    fitness.text = stat.Value.ToString();
+                    return;
+                case StatType.Nimble:
+                    nimble.text = stat.Value.ToString();
+                    return;
+                case StatType.Technical:
+                    technical.text = stat.Value.ToString();
+                    return;
+                case StatType.Medical:
+                    medical.text = stat.Value.ToString();
+                    return;
+            }
         }
     }
 }

@@ -26,6 +26,17 @@ namespace Zomlypse
             return true;
         }
 
+        public bool TryDecrease(int value = 1)
+        {
+            if (value > Value)
+            {
+                return false;
+            }
+
+            Value -= value;
+            return true;
+        }
+
         public int Randomize(int max)
         {
             int clamp = max >= MAX
