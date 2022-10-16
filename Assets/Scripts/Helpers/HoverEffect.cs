@@ -5,7 +5,7 @@ using Zomlypse.Singleton;
 
 namespace Zomlypse.Helpers
 {
-    public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         [SerializeField]
         private LeanTweenType easing;

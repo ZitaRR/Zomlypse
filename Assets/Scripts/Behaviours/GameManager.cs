@@ -19,6 +19,7 @@ namespace Zomlypse.Behaviours
         public UI UserInterface { get => userInterface; }
         public TextLinker Linker { get => linker; }
         public EntityManager Entities { get => entities; }
+        public CharacterWindow CharacterWindow { get => characterWindow; }
 
         [SerializeField]
         private Notifications notifications;
@@ -30,6 +31,8 @@ namespace Zomlypse.Behaviours
         private TextLinker linker;
         [SerializeField]
         private EntityManager entities;
+        [SerializeField]
+        private CharacterWindow characterWindow;
 
         private void Awake()
         {
@@ -46,6 +49,7 @@ namespace Zomlypse.Behaviours
             UserInterface.Initialize(this);
             Entities.Initialize(this);
             Linker.Initialize(this);
+            CharacterWindow.Initialize(this);
         }
 
         private void Start()
@@ -79,6 +83,11 @@ namespace Zomlypse.Behaviours
         public void ChangeScene(string sceneName)
         {
             SceneLoader.LoadScene(sceneName);
+        }
+
+        public void CloseCharacterWindow()
+        {
+            CharacterWindow.Disable();
         }
     }
 }

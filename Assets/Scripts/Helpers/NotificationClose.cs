@@ -11,12 +11,14 @@ namespace Zomlypse.Helpers
         private TextMeshProUGUI text;
         private TextLinker linker;
         private Notifications notifications;
+        private CharacterWindow charWindow;
 
         private void Start()
         {
             text = GetComponentInChildren<TextMeshProUGUI>();
             linker = GameManager.Instance.Linker;
             notifications = GameManager.Instance.Notifications;
+            charWindow = GameManager.Instance.CharacterWindow;
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -24,9 +26,7 @@ namespace Zomlypse.Helpers
             Entity entity = linker.GetLinkCharacter(text);
             if (entity != null)
             {
-                notifications.Add(new Notification(
-                    "Survivor",
-                    $"You pressed on {linker.CharacterLink(entity.Info)}!"));
+                charWindow.Enable(entity);
                 return;
             }
 
