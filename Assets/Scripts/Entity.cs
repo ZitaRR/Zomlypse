@@ -11,6 +11,7 @@ namespace Zomlypse
 
         public Appearance Appearance { get; set; }
         public CharacterInfo Info { get; set; }
+        public Stats Stats { get; set; }
 
         static Entity()
         {
@@ -29,18 +30,22 @@ namespace Zomlypse
 
             Info = new CharacterInfo(name, RandomAge(), gender);
             Appearance = Appearance.Random(Info.Gender);
-            UnityEngine.Debug.Log($"Instantiated entity: {Info.Fullname}, {Info.Gender}");
+            Stats = Stats.Random();
+            UnityEngine.Debug.Log(
+                $"Instantiated entity: {Info.Fullname}, {Info.Gender}\n" +
+                $"{Stats.Fitness} - {Stats.Nimble} - {Stats.Technical} - {Stats.Medical}");
         }
 
-        public Entity(CharacterInfo info) : this(info, Appearance.Random(info.Gender))
+        public Entity(CharacterInfo info) : this(info, Appearance.Random(info.Gender), Stats.Random())
         {
             
         }
 
-        public Entity(CharacterInfo info, Appearance appearance)
+        public Entity(CharacterInfo info, Appearance appearance, Stats stats)
         {
             Info = info;
             Appearance = appearance;
+            Stats = stats;
         }
 
         public static int RandomAge()

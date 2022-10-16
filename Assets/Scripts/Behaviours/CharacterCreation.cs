@@ -40,6 +40,7 @@ namespace Zomlypse.Behaviours
         private CustomizationPart current;
         private CustomizationPart previous;
         private Sprite[] sprites;
+        private Stats stats;
 
         private void Awake()
         {
@@ -197,7 +198,7 @@ namespace Zomlypse.Behaviours
             }
 
             info = new CharacterInfo(input.text, 27, ActiveAppearance.Gender, true);
-            GameManager.Instance.Player = new Entity(info, ActiveAppearance);
+            GameManager.Instance.Player = new Entity(info, ActiveAppearance, Stats.Random());
             SceneLoader.LoadScene("Play_SampleScene");
         }
 
