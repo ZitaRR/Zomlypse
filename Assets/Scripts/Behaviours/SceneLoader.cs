@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using Zomlypse.Enums;
+using Zomlypse.States;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Behaviours
 {
@@ -111,7 +113,7 @@ namespace Zomlypse.Behaviours
             }
 
             int index = name.IndexOf('_') + 1;
-            if (index <= -1)
+            if (index <= 0)
             {
                 throw new ArgumentException("Invalid scene name");
             }
@@ -138,6 +140,7 @@ namespace Zomlypse.Behaviours
             Current = LOADING_SCENE;
             State = SceneState.Loading;
 
+            StateMachine.SetState<LoadState>();
             OnDeactivation?.Invoke(previousScene, previousState);
             SceneManager.LoadScene(LOADING_SCENE);
         }

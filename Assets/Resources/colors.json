@@ -1,0 +1,80 @@
+{
+  "skin": [
+    {
+      "name": "Pale",
+      "hex": "FFE2C9"
+    },
+    {
+      "name": "Light",
+      "hex": "E6C8B0"
+    },
+    {
+      "name": "Tan",
+      "hex": "FFCBA3"
+    },
+    {
+      "name": "Dark Tan",
+      "hex": "D8905F"
+    },
+    {
+      "name": "Light Dark",
+      "hex": "88513A"
+    },
+    {
+      "name": "Dark",
+      "hex": "733E26"
+    }
+  ],
+  "eyes": [
+    {
+      "name": "Light Blue",
+      "hex": "7AA6D7"
+    },
+    {
+      "name": "Dark Blue",
+      "hex": "1D57A9"
+    },
+    {
+      "name": "Light Green",
+      "hex": "509D28"
+    },
+    {
+      "name": "Dark Green",
+      "hex": "215517"
+    },
+    {
+      "name": "Light Brown",
+      "hex": "AF3401"
+    },
+    {
+      "name": "Dark Brown",
+      "hex": "411C01"
+    }
+  ],
+  "hair": [
+    {
+      "name": "Blonde",
+      "hex": "FEE469"
+    },
+    {
+      "name": "Honey",
+      "hex": "F7C003"
+    },
+    {
+      "name": "Caramel",
+      "hex": "E47A0A"
+    },
+    {
+      "name": "Auburn",
+      "hex": "A52A2A"
+    },
+    {
+      "name": "Ginger",
+      "hex": "FF5500"
+    },
+    {
+      "name": "Brunette",
+      "hex": "90542F"
+    }
+  ]
+}

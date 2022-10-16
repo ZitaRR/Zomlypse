@@ -7,22 +7,22 @@ namespace Zomlypse.Helpers
     public class EnsureInput : MonoBehaviour
     {
         [SerializeField]
-        private TMP_InputField input;
+        protected TMP_InputField input;
+          
+        protected Button button;
 
-        private Button button;
-
-        private void Awake()
+        protected virtual void Awake()
         {
             button = GetComponent<Button>();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             input.onValueChanged.AddListener((input) => Ensure(input));
             Ensure(input.text);
         }
 
-        private void Ensure(string input)
+        protected virtual void Ensure(string input)
         {
             button.interactable = !string.IsNullOrEmpty(input);
         }

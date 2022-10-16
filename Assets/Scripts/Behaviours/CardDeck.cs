@@ -14,6 +14,7 @@ namespace Zomlypse.Behaviours
         private Vector2 origin;
         private float deckWidth;
         private float cardWidth;
+        private bool initialized;
 
         private void Awake()
         {
@@ -34,26 +35,48 @@ namespace Zomlypse.Behaviours
 
             cardRect.sizeDelta = new Vector2(deck.rect.height * .75f, 0f);
             origin = new Vector2(deck.rect.min.x + cardWidth / 2, 0f);
+
+            initialized = true;
         }
 
         private void AdjustCards()
         {
             int cards = this.cards.Count;
-            float spacing = (deckWidth - cardWidth) / (cards - 1);
+            float spacing = (deckWidth - cardWidth) / (Mathf.Clamp(cards - 1, 1, float.MaxValue));
         
-            for (int i = 1; i < cards; i++)
+            for (int i = 0; i < cards; i++)
             {
                 RectTransform current = this.cards[i];
                 current.anchoredPosition = new Vector2(origin.x + spacing * i, origin.y);
             }
         }
 
-        public void AddCard(Entity entity)
+        private IEnumerator EnsureInitialization()
         {
-            RectTransform rect = Instantiate(cardRect, deck);
-            rect.GetComponent<Card>().Apply(entity.Appearance);
-            cards.Add(rect);
-            AdjustCards();
+            if (initialized)
+            {
+                yield return null;
+            }
+
+            yield return new WaitUntil(() => initialized == true);
+        }
+
+        private IEnumerator AddCards(params Entity[] entities)
+        {
+            yield return StartCoroutine(EnsureInitialization());
+
+            for (int i = 0; i < entities.Length; i++)
+            {
+                RectTransform rect = Instantiate(cardRect, deck);
+                rect.GetComponent<Card>().Apply(entities[i].Appearance);
+                cards.Add(rect);
+                AdjustCards();
+            }
         } 
+
+        public void Add(params Entity[] entites)
+        {
+            StartCoroutine(AddCards(entites));
+        }
     }
 }

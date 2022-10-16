@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using Zomlypse.Behaviours;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Helpers
 {
@@ -12,6 +14,7 @@ namespace Zomlypse.Helpers
         [SerializeField]
         private float duration;
 
+        private UI ui;
         private RectTransform rect;
         private Vector2 origin;
         private Vector2 target;
@@ -19,18 +22,19 @@ namespace Zomlypse.Helpers
 
         private void Awake()
         {
+            ui = GameManager.Instance.UserInterface;
             rect = GetComponent<RectTransform>();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (!UI.IsTweening(rect, out _))
+            if (!ui.IsTweening(rect, out _))
             {
                 origin = rect.anchoredPosition;
                 target = new Vector2(origin.x, origin.y - offset);
             }
 
-            ltd = UI.Move(rect, target, duration)
+            ltd = ui.Move(rect, target, duration)
                 .setEase(easing);
         }
 
@@ -42,7 +46,7 @@ namespace Zomlypse.Helpers
             }
 
             LeanTween.cancel(ltd.rectTransform);
-            ltd = UI.Move(rect, origin, duration, () => ltd = null)
+            ltd = ui.Move(rect, origin, duration, () => ltd = null)
                 .setEase(easing);
         }
     }

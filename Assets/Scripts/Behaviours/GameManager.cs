@@ -1,5 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zomlypse.Enums;
+using Zomlypse.IO;
+using Zomlypse.States;
+using Zomlypse.Singleton;
 
 namespace Zomlypse.Behaviours
 {
@@ -7,9 +11,25 @@ namespace Zomlypse.Behaviours
     {
         public static GameManager Instance { get; private set; }
 
-        public Entity Player { get; set; }
+        public static event Action OnFrame;
 
+        public Entity Player { get; set; }
+        public Notifications Notifications { get => notifications; }
+        public CardDeck Deck { get => deck; }
+        public UI UserInterface { get => userInterface; }
+        public TextLinker Linker { get => linker; }
+        public EntityManager Entities { get => entities; }
+
+        [SerializeField]
+        private Notifications notifications;
+        [SerializeField]
         private CardDeck deck;
+        [SerializeField]
+        private UI userInterface;
+        [SerializeField]
+        private TextLinker linker;
+        [SerializeField]
+        private EntityManager entities;
 
         private void Awake()
         {
@@ -21,20 +41,33 @@ namespace Zomlypse.Behaviours
 
             Instance = this;
             DontDestroyOnLoad(Instance);
+
+            FileManager.Initialize();
+            UserInterface.Initialize(this);
+            Entities.Initialize(this);
+            Linker.Initialize(this);
         }
 
         private void Start()
         {
+            StateMachine.SetState<MenuState>();
+
             SceneLoader.OnActivation += SceneActivation;
             SceneLoader.OnDeactivation += SceneDeactivation;
+        }
+
+        private void Update()
+        {
+            OnFrame?.Invoke();
         }
 
         private void SceneActivation(string scene, SceneState state)
         {
             if (state == SceneState.Active)
             {
-                deck = GameObject.Find("Deck").GetComponent<CardDeck>();
-                deck.AddCard(Player);
+                StateMachine.SetState<PlayState>();
+
+                Deck.Add(Player);
             }
         }
 

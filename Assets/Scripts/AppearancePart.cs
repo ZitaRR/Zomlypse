@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using UnityEngine;
 using Zomlypse.Enums;
+using Zomlypse.Extensions;
 
 namespace Zomlypse
 {
@@ -35,6 +37,7 @@ namespace Zomlypse
             }
         }
         public CustomizationPart Part { get; private set; }
+        public int Index { get; private set; }
 
         public event Action<AppearancePart> OnChange;
 
@@ -51,6 +54,11 @@ namespace Zomlypse
             Sprite = sprite;
             Color = color;
             Part = part;
+        }
+
+        public void Clear()
+        {
+            Sprite = Resources.Load<Sprite>(Appearance.EMPTY);
         }
     }
 }
