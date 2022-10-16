@@ -1646,6 +1646,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notifications: {fileID: 441517354}
   deck: {fileID: 333267316}
+  userInterface:
+    speed: 0.2
+    root: {fileID: 1471697312}
+  linker:
+    characterColor: 0
 --- !u!4 &1454776663
 Transform:
   m_ObjectHideFlags: 0
