@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Zomlypse.Behaviours
 {
@@ -11,14 +13,15 @@ namespace Zomlypse.Behaviours
 
         private RectTransform deck;
         private List<RectTransform> cards = new List<RectTransform>();
-        private Vector2 origin;
         private float deckWidth;
         private float cardWidth;
         private bool initialized;
+        private HorizontalLayoutGroup horizontalLayout;
 
         private void Awake()
         {
             deck = GetComponent<RectTransform>();
+            horizontalLayout = GetComponent<HorizontalLayoutGroup>();
         }
 
         private void Start()
@@ -32,9 +35,7 @@ namespace Zomlypse.Behaviours
 
             deckWidth = deck.rect.width;
             cardWidth = cardRect.rect.width;
-
             cardRect.sizeDelta = new Vector2(deck.rect.height * .75f, 0f);
-            origin = new Vector2(deck.rect.min.x + cardWidth / 2, 0f);
 
             initialized = true;
         }
@@ -42,13 +43,16 @@ namespace Zomlypse.Behaviours
         private void AdjustCards()
         {
             int cards = this.cards.Count;
-            float spacing = (deckWidth - cardWidth) / (Mathf.Clamp(cards - 1, 1, float.MaxValue));
-        
-            for (int i = 0; i < cards; i++)
+            float width = cardWidth * cards;
+            if (width <= deckWidth)
             {
-                RectTransform current = this.cards[i];
-                current.anchoredPosition = new Vector2(origin.x + spacing * i, origin.y);
+                horizontalLayout.spacing = 0;
+                return;
             }
+
+            float diff = width - deckWidth;
+            float spacing = diff / (cards - 1);
+            horizontalLayout.spacing = -spacing;
         }
 
         private IEnumerator EnsureInitialization()
