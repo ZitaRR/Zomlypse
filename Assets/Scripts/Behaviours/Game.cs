@@ -70,6 +70,14 @@ namespace Zomlypse.Behaviours
             format = CultureInfo.CreateSpecificCulture("en-US");
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.Mouse4))
+            {
+                entities.AddEntityToPlayer();
+            }
+        }
+
         private void FixedUpdate()
         {
             if (pace == GamePace.Pause)
